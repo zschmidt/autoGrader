@@ -11,19 +11,19 @@ def predictor( row ):
 	married = row['Married'] if row['Married'] != '' else m_mode
 	history = row['Credit_History'] if row['Credit_History'] != '' else h_mode
 		
-		if grad == 'Graduate':
-			if history == '1':
+	if grad == 'Graduate':
+		if history == '1':
+			return 'Y'
+		else:
+			return 'N'
+	else:
+		if area != 'Rural':
+			if married == 'Yes':
 				return 'Y'
 			else:
 				return 'N'
 		else:
-			if area != 'Rural':
-				if married == 'Yes':
-					return 'Y'
-				else:
-					return 'N'
-			else:
-				return 'N'
+			return 'N'
 
 	raise ValueError('No leaf reached for row: ' + row)
 	cases = [[predictor(row), row['Loan_Status']] for row in loan_table]
@@ -48,8 +48,10 @@ xloan_table  = xdf_dict.values() # convert to final form
 loan_table = xloan_table
 
 try:
-	# &&&  # paste user code here 
-	thisIsAnError
+	# Here lies the new code
+	with open(sys.argv[1], 'r') as fin:
+		function = fin.read()
+		exec(function)
 
 except Exception as e:
 	report('Generic error', 'On your own', e)
