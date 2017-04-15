@@ -4,7 +4,7 @@ python:
   - "2.7"
   - "3.5"
 # command to install dependencies
-# install: "pip install -r requirements.txt"
+install: "pip install -r requirements.txt"
 # # command to run tests
 script: 
   python module9_challenge_2.py test.py
