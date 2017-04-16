@@ -18,12 +18,6 @@
 // xhr.send();
 
 
-var xhr = new XMLHttpRequest();
-xhr.open('POST', "https://api.travis-ci.com/auth/github");
-xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
-xhr.send({'github_token':"e45dc27e9b8da6777b4d3915f8bdb5679429ce1a"});
-
-
 
 xhr.addEventListener("readystatechange", response, false);
 
