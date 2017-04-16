@@ -8,3 +8,10 @@ install:
 # # command to run tests
 script: 
   python module9_challenge_2.py test.py
+
+
+
+notifications:
+  email:
+    on_success: always
+    on_failure: always
