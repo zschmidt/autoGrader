@@ -33,7 +33,7 @@ import sys
 import json
 
 def report( name, shortd, longd):
-	d = {'Name': name, 'Short': shortd, 'Long': longd}
+	d = {'Name': name, 'Short': shortd, 'Long': str(longd)}
 	print(json.dumps(d))
 
 #Mock data goes first
