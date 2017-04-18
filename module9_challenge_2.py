@@ -54,13 +54,13 @@ try:
 		exec(function)
 
 except Exception as e:
-	report('Generic error', 'On your own', e)
+	report('Generic error', 'On your own', str(e))
 	sys.exit(1)
 
 try:
 	predictor		# does var exist?
 except NameError as e:
-	report('Name error', 'Typically a typo', e)
+	report('Name error', 'Typically a typo', str(e))
 	sys.exit(1)
 
 if not callable(predictor):
@@ -70,7 +70,7 @@ if not callable(predictor):
 try:
 	ucases = [(predictor(row), row['Loan_Status']) for row in loan_table]
 except Exception as e:
-	report('Generic error', 'Problem calling predictor function', e)
+	report('Generic error', 'Problem calling predictor function', str(e))
 	sys.exit(1)
 else:
 	if len(ucases) != len(loan_table):

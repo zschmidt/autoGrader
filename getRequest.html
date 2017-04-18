@@ -28,7 +28,7 @@ function getJobID(e){
 		}else{
 			var mostRecentBuildJobID = response.builds[0].job_ids[0];
 			xhr = new XMLHttpRequest();
-			xhr.open('GET', "https://api.travis-ci.org/jobs/222466811/log");
+			xhr.open('GET', "https://api.travis-ci.org/jobs/"+mostRecentBuildJobID+"/log");
 			xhr.setRequestHeader("Accept", "text/plain");
 			xhr.send();
 			xhr.addEventListener("readystatechange", getLog, false);
@@ -42,7 +42,17 @@ function getLog(e){
 	if(xhr.readyState === 4 && xhr.status == 200){
 		var log = xhr.response;
 		var logArray = log.split("python module9_challenge_2.py test.py");
-		console.log("Here's your log! ", logArray);
+
+
+		var errorMessage = logArray[1].split('travis_time')[0];
+
+		errorMessage.trim();
+
+		console.log("Before JSON ", errorMessage);
+
+		errorMessage = JSON.parse(errorMessage);
+
+		console.log("Error: ", errorMessage);
 	}
 }
 
