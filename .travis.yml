@@ -1,6 +1,6 @@
 language: python
 python:
-  - "2.7"
+  # - "2.7"
   - "3.5"
 # command to install dependencies
 install: 
@@ -13,5 +13,5 @@ script:
 
 notifications:
   email:
-    on_success: always
-    on_failure: always
+    on_success: never
+    on_failure: never

@@ -11,24 +11,41 @@
 
 
 
-// var xhr = new XMLHttpRequest();
-// xhr.open('GET', "https://api.travis-ci.com/builds");
-// xhr.setRequestHeader("Authorization", 'token "e45dc27e9b8da6777b4d3915f8bdb5679429ce1a"');
-// xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
-// xhr.send();
+var xhr = new XMLHttpRequest();
+xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
+xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
+xhr.send();
 
+xhr.addEventListener("readystatechange", getJobID, false);
 
+function getJobID(e){
+	if(xhr.readyState === 4 && xhr.status == 200){
+		var response = JSON.parse(xhr.response);
+		console.log("First response ", response);
 
-xhr.addEventListener("readystatechange", response, false);
+		if(response.builds[0].state === "passed"){
+			console.log("Most recent build passed!!");
+		}else{
+			var mostRecentBuildJobID = response.builds[0].job_ids[0];
+			xhr = new XMLHttpRequest();
+			xhr.open('GET', "https://api.travis-ci.org/jobs/222466811/log");
+			xhr.setRequestHeader("Accept", "text/plain");
+			xhr.send();
+			xhr.addEventListener("readystatechange", getLog, false);
+		}
 
-
-
-function response(e){
-	if(xhr.readyState === 4){
-		console.log(xhr.status)
-		console.log(e)
+		
 	}
 }
+
+function getLog(e){
+	if(xhr.readyState === 4 && xhr.status == 200){
+		var log = xhr.response;
+		var logArray = log.split("python module9_challenge_2.py test.py");
+		console.log("Here's your log! ", logArray);
+	}
+}
+
 </script>
 
 </body>
