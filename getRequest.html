@@ -35,6 +35,9 @@ function getJobID(e){
 		if(response.builds[0].state === "passed"){
 			$("#status").html("<span class='label label-success'>Passed</span>");
 
+		} if(response.builds[0].state === "started"){
+			$("#status").html("<span class='label label-primary'>Started</span>");
+
 		}else{
 
 			$("#status").html("<span class='label label-danger'>"+response.builds[0].state.toUpperCase()+"</span>");
