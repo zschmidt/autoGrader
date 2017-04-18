@@ -30,10 +30,11 @@ def predictor( row ):
 
 '''
 import sys
+import json
 
 def report( name, shortd, longd):
-	d = {str("Name"): str(name), str("Short"): str(shortd), str("Long"): str(longd)}
-	print(str(d))
+	d = {'Name': name, 'Short': shortd, 'Long': longd}
+	print(json.dumps(d))
 
 #Mock data goes first
 
@@ -54,27 +55,27 @@ try:
 		exec(function)
 
 except Exception as e:
-	report("Generic error", "On your own", e)
+	report('Generic error', 'On your own', str(e))
 	sys.exit(1)
 
 try:
 	predictor		# does var exist?
 except NameError as e:
-	report("Name error", "Typically a typo", e)
+	report('Name error', 'Typically a typo', str(e))
 	sys.exit(1)
 
 if not callable(predictor):
-	report("Data type bug", "predictor is not a function - review function syntax", "No further help available")
+	report('Data type bug', 'predictor is not a function - review function syntax', 'No further help available')
 	sys.exit(1)
 
 try:
 	ucases = [(predictor(row), row['Loan_Status']) for row in loan_table]
 except Exception as e:
-	report("Generic error", "Problem calling predictor function", e)
+	report('Generic error', 'Problem calling predictor function', str(e))
 	sys.exit(1)
 else:
 	if len(ucases) != len(loan_table):
-		report("Length bug", "Not predicting a value for every row", "No further help available")
+		report('Length bug', 'Not predicting a value for every row', 'No further help available')
 		sys.exit(1)
 
 def xpredictor( row ):
