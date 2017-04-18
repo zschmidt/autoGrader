@@ -32,7 +32,7 @@ def predictor( row ):
 import sys
 
 def report( name, shortd, longd):
-	d = {"Name": name, "Short": shortd, "Long": longd}
+	d = {str("Name"): str(name), str("Short"): str(shortd), str("Long"): str(longd)}
 	print(str(d))
 
 #Mock data goes first
@@ -54,13 +54,13 @@ try:
 		exec(function)
 
 except Exception as e:
-	report("Generic error", "On your own", str(e))
+	report("Generic error", "On your own", e)
 	sys.exit(1)
 
 try:
 	predictor		# does var exist?
 except NameError as e:
-	report("Name error", "Typically a typo", str(e))
+	report("Name error", "Typically a typo", e)
 	sys.exit(1)
 
 if not callable(predictor):
@@ -70,7 +70,7 @@ if not callable(predictor):
 try:
 	ucases = [(predictor(row), row['Loan_Status']) for row in loan_table]
 except Exception as e:
-	report("Generic error", "Problem calling predictor function", str(e))
+	report("Generic error", "Problem calling predictor function", e)
 	sys.exit(1)
 else:
 	if len(ucases) != len(loan_table):
