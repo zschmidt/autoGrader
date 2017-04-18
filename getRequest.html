@@ -15,6 +15,8 @@
 
     <!-- Custom styles for this template -->
     <link href="css/starter-template.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
 <script type="text/javascript">
@@ -31,8 +33,15 @@ function getJobID(e){
 		console.log("First response ", response);
 
 		if(response.builds[0].state === "passed"){
-			console.log("Most recent build passed!!");
+			$("#status").html("<span class='label label-success'>Passed</span>");
+
 		}else{
+
+			$("#status").html("<span class='label label-danger'>"+response.builds[0].state.toUpperCase()+"</span>");
+
+
+			$("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Fetching error...");
+
 			var mostRecentBuildJobID = response.builds[0].job_ids[0];
 			xhr = new XMLHttpRequest();
 			xhr.open('GET', "https://api.travis-ci.org/jobs/"+mostRecentBuildJobID+"/log");
@@ -49,17 +58,13 @@ function getLog(e){
 	if(xhr.readyState === 4 && xhr.status == 200){
 		var log = xhr.response;
 		var logArray = log.split("python module9_challenge_2.py test.py");
-
-
 		var errorMessage = logArray[1].split('travis_time')[0];
-
 		errorMessage.trim();
-
-		console.log("Before JSON ", errorMessage);
-
 		errorMessage = JSON.parse(errorMessage);
 
-		console.log("Error: ", errorMessage);
+
+		$("#error").html("Error: "+errorMessage.Long+"<br/>Cause: "+errorMessage.Short);
+
 	}
 }
 
@@ -91,7 +96,12 @@ function getLog(e){
 
       <div class="starter-template">
         <h1>Latest Build Status</h1>
-        <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+        <p class="lead" id="status">
+        	<i class="fa fa-hourglass-half fa-spin" style="font-size:24px"></i> Fetching...
+        </p>
+
+        <p id="error" class="align-left">
+        </p>
       </div>
 
     </div><!-- /.container -->
