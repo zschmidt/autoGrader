@@ -38,7 +38,7 @@ function getJobID(e){
 		} if(response.builds[0].state === "started"){
 			$("#status").html("<span class='label label-primary'>Started</span>");
 
-			("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Building...");
+			$("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Building...");
 
 		} if(response.builds[0].state === "created"){
 			$("#status").html("<span class='label label-primary'>Created</span>");
@@ -110,7 +110,7 @@ function getLog(e){
         	<i class="fa fa-hourglass-half fa-spin" style="font-size:24px"></i> Fetching...
         </p>
 
-        <p id="error" class="align-left">
+        <p id="error">
         </p>
       </div>
 
