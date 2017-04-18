@@ -35,12 +35,12 @@ function getJobID(e){
 		if(response.builds[0].state === "passed"){
 			$("#status").html("<span class='label label-success'>Passed</span>");
 
-		} if(response.builds[0].state === "started"){
+		} else if(response.builds[0].state === "started"){
 			$("#status").html("<span class='label label-primary'>Started</span>");
 
 			$("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Building...");
 
-		} if(response.builds[0].state === "created"){
+		} else if(response.builds[0].state === "created"){
 			$("#status").html("<span class='label label-primary'>Created</span>");
 
 			$("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Starting up...");
