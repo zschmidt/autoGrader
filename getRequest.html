@@ -73,7 +73,7 @@ function getLog(e){
 		errorMessage = JSON.parse(errorMessage);
 
 
-		$("#error").html("Error: "+errorMessage.Long+"<br/>Cause: "+errorMessage.Short);
+		$("#error").html("<p class='lead'>Error: "+errorMessage.Long+"<br/>Cause: "+errorMessage.Short +"</p>");
 
 	}
 }
@@ -103,6 +103,30 @@ function getLog(e){
     </nav>
 
     <div class="container">
+
+      
+
+      <div class="starter-template">
+        <h1>Submit Code</h1>
+        <p class="lead">
+        	Assume <code>loan_table</code> defined correctly. Write a function <code>predictor</code> that implements the tree shown below. <b>Important:</b> use the mode for any columns that have empty values. I suggest you compute the mode(s) in a practice notebook and just use them here. Easier than computing all the modes from scratch below.
+        </p>
+        <div class="col-md-6 col-md-offset-3"><img style="width:100%" src="challenge2.png"></div>
+        
+        <div class="col-md-12 form-group">
+        	<textarea class="form-control" rows="10" id="code"></textarea>
+        </div>
+
+        
+
+        
+      </div>
+
+    </div>
+
+
+
+  	<div class="container">
 
       <div class="starter-template">
         <h1>Latest Build Status</h1>
