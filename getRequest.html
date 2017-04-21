@@ -20,6 +20,30 @@
 </head>
 <body>
 <script type="text/javascript">
+
+//--------------THIS IS ZACH'S SECTION----------------
+
+var obj = {test: "hello world"};
+
+
+var post = new XMLHttpRequest();
+post.open('POST', "http://thoth.cs.uoregon.edu:3000");
+post.setRequestHeader("Content-type", "application/json");
+post.send(JSON.stringify(obj));
+
+post.addEventListener("readystatechange", postToThoth, false);
+
+function postToThoth(e){
+	if(post.readyState === 4 && post.status == 200){
+		console.log("Here's your response: ", post.response);
+	}
+}
+
+
+
+//--------------END ZACH'S SECTION----------------
+
+
 var xhr = new XMLHttpRequest();
 xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
 xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
