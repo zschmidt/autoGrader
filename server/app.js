@@ -1,5 +1,6 @@
 var express = require('express');
-var bodyParser = require('body-parser')
+var bodyParser = require('body-parser');
+var cp = require('child_process');
 var app = express();
 
 // parse application/x-www-form-urlencoded
@@ -15,16 +16,16 @@ app.use(function(req, res, next) {
 // parse application/json
 app.use(bodyParser.json())
 
-app.get('/', function (req, res) {
-  res.send('<h1>Everything is easier in JavaScript!!</h1>')
-})
-
 app.listen(3000, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('Server listening on port 3000!')
 })
 
 // POST method route
 app.post('/', function (req, res) {
+  var ls = cp.spawn('ls');
+  ls.stdout.on('data', function(data) {
+	console.log('Message: ' + data);
+  });
   res.send('You just POST\'d: '+ JSON.stringify(req.body));
   console.log(req.body);
 })
