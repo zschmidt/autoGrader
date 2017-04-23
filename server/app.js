@@ -2,6 +2,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var cp = require('child_process');
 var app = express();
+var dateTime = require('node-datetime');
 
 
 
@@ -27,7 +28,10 @@ app.listen(3000, function() {
 // POST method route
 app.post('/', function(req, res) {
 
-    var testCmd = 'rm submission.py && touch submission.py && echo "'+req.body.code+'">>submission.py';
+	var dt = dateTime.create();
+	dt = dt.format('Y-m-d H:M:S');
+
+    var testCmd = 'rm submission.py && touch submission.py && echo "'+req.body.code+'">>submission.py && git add . && git commit -m "Auto commit from thoth at '+dt+'" && git push';
 
 
     console.log("Request ", req);
