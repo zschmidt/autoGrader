@@ -1,1 +1,1 @@
-this is some code
+print 6
