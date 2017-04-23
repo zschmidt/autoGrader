@@ -17,16 +17,23 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json())
 
 app.listen(3000, function () {
-  //I'm just a dummy comment!
   console.log('Server listening on port 3000!')
 })
 
 // POST method route
 app.post('/', function (req, res) {
-  var ls = cp.spawn('ls');
-  ls.stdout.on('data', function(data) {
-	console.log('Message: ' + data);
+
+  var request = JSON.stringify(req.body);
+
+  var rm = spawn('rm', ['-f', '../fake.txt']);
+  rm.on('close', (code) => {
+    console.log(`rm exited with code ${code}`);
+    var touch = spawn('touch', ['../fake.txt']);
+    touch.on('close', (code) => {
+      console.log(`touch exited with code ${code}`);
+      var echo = spawn('echo', ['"'+request+'">>../fake.txt']);
+    });
   });
-  res.send('You just POST\'d: '+ JSON.stringify(req.body));
+  res.send('You just POST\'d: '+ request);
   console.log(req.body);
 })
