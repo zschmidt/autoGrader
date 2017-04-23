@@ -21,28 +21,6 @@
 <body>
 <script type="text/javascript">
 
-//--------------THIS IS ZACH'S SECTION----------------
-
-var obj = {test: "hello world"};
-
-
-var post = new XMLHttpRequest();
-post.open('POST', "http://thoth.cs.uoregon.edu:3000");
-post.setRequestHeader("Content-type", "application/json");
-post.send(JSON.stringify(obj));
-
-post.addEventListener("readystatechange", postToThoth, false);
-
-function postToThoth(e){
-	if(post.readyState === 4 && post.status == 200){
-		console.log("Here's your response: ", post.response);
-	}
-}
-
-
-
-//--------------END ZACH'S SECTION----------------
-
 
 var xhr = new XMLHttpRequest();
 xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
@@ -138,7 +116,8 @@ function getLog(e){
         <div class="col-md-6 col-md-offset-3"><img style="width:100%" src="challenge2.png"></div>
         
         <div class="col-md-12 form-group">
-        	<textarea class="form-control" rows="10" id="code"></textarea>
+        	<textarea class="form-control" rows="10" id="code"></textarea><br>
+          <button type="button" id="submit" class="btn btn-primary">Submit Code</button>
         </div>
 
         
@@ -171,6 +150,8 @@ function getLog(e){
     <script src="js/jquery.js"></script>
     <script>window.jQuery || document.write('<script src="js/jquery.js"><\/script>')</script>
     <script src="js/bootstrap.min.js"></script>
+
+    <script src="script.js"></script>
 
 
 

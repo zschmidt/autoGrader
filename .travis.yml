@@ -9,7 +9,7 @@ install:
   "pip install pandas"
 # # command to run tests
 script: 
-  python module9_challenge_2.py test.py
+  python module9_challenge_2.py submission.py
 
 
 
