@@ -3,37 +3,44 @@ var bodyParser = require('body-parser');
 var cp = require('child_process');
 var app = express();
 
+
+
 // parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.urlencoded({
+    extended: false
+}))
 
 app.use(function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-  next();
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
 });
 
 
 // parse application/json
 app.use(bodyParser.json())
 
-app.listen(3000, function () {
-  console.log('Server listening on port 3000!')
+app.listen(3000, function() {
+    console.log('Server listening on port 3000!')
 })
 
 // POST method route
-app.post('/', function (req, res) {
+app.post('/', function(req, res) {
 
-  var request = JSON.stringify(req.body);
+    var testCmd = 'rm submission.py && touch submission.py && echo "'+req.body.code+'">>submission.py';
 
-  var rm = spawn('rm', ['-f', '../fake.txt']);
-  rm.on('close', (code) => {
-    console.log(`rm exited with code ${code}`);
-    var touch = spawn('touch', ['../fake.txt']);
-    touch.on('close', (code) => {
-      console.log(`touch exited with code ${code}`);
-      var echo = spawn('echo', ['"'+request+'">>../fake.txt']);
+
+    console.log("Request ", req);
+
+
+    cp.exec(testCmd, (error, stdout, stderr) => {
+        if (error) {
+            console.error(`exec error: ${error}`);
+            return;
+        }
+        console.log(`stdout: ${stdout}`);
+        console.log(`stderr: ${stderr}`);
     });
-  });
-  res.send('You just POST\'d: '+ request);
-  console.log(req.body);
+    res.send('You just POST\'d: ' + JSON.stringify(req.body));
+    console.log(req.body);
 })
