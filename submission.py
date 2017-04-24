@@ -1,1 +1,2 @@
-I've logged out
+def predictor(row):
+    return 'Y'
