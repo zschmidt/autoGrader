@@ -1,1 +1,1 @@
-print 6
+bad code
