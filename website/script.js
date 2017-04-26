@@ -77,12 +77,13 @@ var startBuild = function() {
 var getLastSubmission = function(){
 
   var request = new XMLHttpRequest();
-  request.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
+  request.open('GET', "http://thoth.cs.uoregon.edu:3000/getSubmission");
   request.setRequestHeader("Accept", "text/plain");
   request.send();
   request.addEventListener("readystatechange", function(){
     if (request.readyState === 4 && request.status == 200) {
         var submission = request.response;
+        $("#code").val(submission);
     }
 
   }, false);
@@ -117,6 +118,9 @@ var commit = function() {
 
 
 $("#submit").on('click', commit);
-$(document).ready(getRequest)
+$(document).ready(function(){
+  getLastSubmission();
+  getRequest();
+});
 
 
