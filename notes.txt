@@ -14,3 +14,11 @@ Builds are in opposite order for the above request!!!!
 Forever:
 
 Need to say "forever start app.js &"... omitting the "start" makes forever useless
+
+
+
+
+Travis YML
+
+There's a lint'r here:
+https://lint.travis-ci.org/
