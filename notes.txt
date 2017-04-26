@@ -1,0 +1,16 @@
+xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader");
+
+The above returns a repo ID
+
+
+NOTE:
+xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
+
+Builds are in opposite order for the above request!!!!
+
+
+
+
+Forever:
+
+Need to say "forever start app.js &"... omitting the "start" makes forever useless

@@ -8,6 +8,7 @@ function getJobID(e) {
 
         if (mostRecentBuild.state === "passed") {
             $("#status").html("<span class='label label-success'>Passed</span>");
+            $("#error").html("");
         } else if (mostRecentBuild.state === "started") {
             $("#status").html("<span class='label label-primary'>Started</span>");
             $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Building...");
