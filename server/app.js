@@ -22,11 +22,7 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json())
 
 
-// app.get('/', function (req, res) {
-//   res.send('Hello World!')
-// })
-
-app.get('/', function(req, res){
+app.get('/getSubmission', function(req, res){
     var cmd = 'cat submission.py';
     cp.exec(cmd, (error, stdout, stderr) => {
         console.log("Imma send this back:\n", stdout);
