@@ -74,6 +74,8 @@ var startBuild = function() {
 
 
 
+//This fires off a get request to get the latest submission
+
 var getLastSubmission = function(){
 
   var request = new XMLHttpRequest();

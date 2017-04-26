@@ -1,0 +1,35 @@
+
+<!doctype html>
+
+<title>CodeMirror: Python mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="doc/docs.css">
+
+<link rel="stylesheet" href="lib/codemirror.css">
+<script src="lib/codemirror.js"></script>
+<script src="addon/edit/matchbrackets.js"></script>
+<script src="mode/python/python.js"></script>
+<style type="text/css">.CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}</style>
+
+<article>
+<h2>Python mode</h2>
+
+<div>
+  <textarea id="code" name="code">
+  </textarea>
+</div>
+
+
+    <script>
+      var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: {name: "python",
+               version: 3,
+               singleLineStringErrors: true},
+        lineNumbers: true,
+        indentUnit: 4,
+        matchBrackets: true
+    });
+
+    </script>
+
+  </article>
