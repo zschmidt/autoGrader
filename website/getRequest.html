@@ -19,70 +19,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 </head>
 <body>
-<script type="text/javascript">
-
-
-var xhr = new XMLHttpRequest();
-xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
-xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
-xhr.send();
-
-xhr.addEventListener("readystatechange", getJobID, false);
-
-function getJobID(e){
-	if(xhr.readyState === 4 && xhr.status == 200){
-		var response = JSON.parse(xhr.response);
-		console.log("First response ", response);
-
-		if(response.builds[0].state === "passed"){
-			$("#status").html("<span class='label label-success'>Passed</span>");
-
-		} else if(response.builds[0].state === "started"){
-			$("#status").html("<span class='label label-primary'>Started</span>");
-
-			$("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Building...");
-
-		} else if(response.builds[0].state === "created"){
-			$("#status").html("<span class='label label-primary'>Created</span>");
-
-			$("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Starting up...");
-
-		}else{
-
-			$("#status").html("<span class='label label-danger'>"+response.builds[0].state.toUpperCase()+"</span>");
-
-
-			$("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Fetching error...");
-
-			var mostRecentBuildJobID = response.builds[0].job_ids[0];
-			xhr = new XMLHttpRequest();
-			xhr.open('GET', "https://api.travis-ci.org/jobs/"+mostRecentBuildJobID+"/log");
-			xhr.setRequestHeader("Accept", "text/plain");
-			xhr.send();
-			xhr.addEventListener("readystatechange", getLog, false);
-		}
-
-		
-	}
-}
-
-function getLog(e){
-	if(xhr.readyState === 4 && xhr.status == 200){
-		var log = xhr.response;
-		var logArray = log.split("python module9_challenge_2.py test.py");
-		var errorMessage = logArray[1].split('travis_time')[0];
-		errorMessage.trim();
-		errorMessage = JSON.parse(errorMessage);
-
-
-		$("#error").html("<p class='lead'>Error: "+errorMessage.Long+"<br/>Cause: "+errorMessage.Short +"</p>");
-
-	}
-}
-
-</script>
-
-
  <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container">
         <div class="navbar-header">
@@ -97,8 +33,6 @@ function getLog(e){
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="active"><a href="#">Home</a></li>
-            <!-- <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li> -->
           </ul>
         </div><!--/.nav-collapse -->
       </div>
@@ -152,10 +86,6 @@ function getLog(e){
     <script src="js/bootstrap.min.js"></script>
 
     <script src="script.js"></script>
-
-
-
-
 
 
 </body>
