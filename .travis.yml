@@ -1,16 +1,20 @@
-language: python
+language: 
+  python
+
 cache:
   pip
+  python
+
 python:
   - "3.6"
 # command to install dependencies
-install: 
+install:
+  "wget https://s3.amazonaws.com/travis-python-archives/binaries/ubuntu/12.04/x86_64/python-3.6.tar.bz2" 
+  "sudo tar xjf python-3.6.tar.bz2 --directory /"
   "pip install pandas"
 # # command to run tests
 script: 
   python module9_challenge_2.py submission.py
-
-
 
 notifications:
   email:
