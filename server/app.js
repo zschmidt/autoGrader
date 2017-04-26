@@ -25,7 +25,6 @@ app.use(bodyParser.json())
 app.get('/getSubmission', function(req, res){
     var cmd = 'cat submission.py';
     cp.exec(cmd, (error, stdout, stderr) => {
-        console.log("Imma send this back:\n", stdout);
         res.send(stdout);
     });
 });
