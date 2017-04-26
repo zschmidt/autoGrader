@@ -42,7 +42,6 @@ function getLog(e) {
 
 
 var getRequest = function() {
-    console.log("Inside getRequest");
     xhr = new XMLHttpRequest();
     xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
     xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
@@ -55,17 +54,18 @@ var startBuild = function() {
     $("#status").html("<span class='label label-primary'>Created</span>");
     $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Starting up...");
     mostRecentBuild.state = "created";
+
     function sleep(ms) {
-      return new Promise(resolve => setTimeout(resolve, ms));
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
     async function wait() {
-      await sleep(10000);
-      var interval = setInterval(function(){
-        getRequest();
-        if(mostRecentBuild.state === "passed" || mostRecentBuild.state === "failed" || mostRecentBuild.state === "errored"){
-          clearInterval(interval);
-        }
-      }, 3000);
+        await sleep(10000);
+        var interval = setInterval(function() {
+            getRequest();
+            if (mostRecentBuild.state === "passed" || mostRecentBuild.state === "failed" || mostRecentBuild.state === "errored") {
+                clearInterval(interval);
+            }
+        }, 3000);
     }
 
     wait();
@@ -76,19 +76,19 @@ var startBuild = function() {
 
 //This fires off a get request to get the latest submission
 
-var getLastSubmission = function(){
+var getLastSubmission = function(editor) {
 
-  var request = new XMLHttpRequest();
-  request.open('GET', "http://thoth.cs.uoregon.edu:3000/getSubmission");
-  request.setRequestHeader("Accept", "text/plain");
-  request.send();
-  request.addEventListener("readystatechange", function(){
-    if (request.readyState === 4 && request.status == 200) {
-        var submission = request.response;
-        $("#code").val(submission);
-    }
+    var request = new XMLHttpRequest();
+    request.open('GET', "http://thoth.cs.uoregon.edu:3000/getSubmission");
+    request.setRequestHeader("Accept", "text/plain");
+    request.send();
+    request.addEventListener("readystatechange", function() {
+        if (request.readyState === 4 && request.status == 200) {
+            var submission = request.response;
+            editor.setValue(submission);
+        }
 
-  }, false);
+    }, false);
 
 }
 
@@ -101,7 +101,7 @@ var commit = function() {
     startBuild();
 
     var obj = {
-        code: $("#code").val()
+        code: editor.getValue()
     };
     var post = new XMLHttpRequest();
     post.open('POST', "http://thoth.cs.uoregon.edu:3000");
@@ -120,9 +120,18 @@ var commit = function() {
 
 
 $("#submit").on('click', commit);
-$(document).ready(function(){
-  getLastSubmission();
-  getRequest();
+$(document).ready(function() {
+    editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+        mode: {
+            name: "python",
+            version: 3,
+            singleLineStringErrors: true
+        },
+        lineNumbers: true,
+        indentUnit: 4,
+        matchBrackets: true
+    });
+    getLastSubmission(editor);
+    getRequest();
+
 });
-
-
