@@ -21,22 +21,26 @@ app.use(function(req, res, next) {
 // parse application/json
 app.use(bodyParser.json())
 
+
+app.get('/', function (req, res) {
+  res.send('Hello World!')
+})
+
+// app.get('/', function(req, res){
+//     var cmd = 'cat submission.py';
+//     cp.exec(cmd, (error, stdout, stderr) => {
+//         console.log("Imma send this back:\n", stdout);
+//         res.send(stdout);
+//     });
+// });
+
+
 app.listen(3000, function() {
     console.log('Server listening on port 3000!')
 })
 
 
-app.get('/', function(req, res){
 
-    var cmd = 'cat submission.py';
-    cp.exec(cmd, (error, stdout, stderr) => {
-        console.log("Imma send this back:\n", stdout);
-        res.send(stdout);
-    });
-
-
-
-});
 
 // POST method route
 app.post('/', function(req, res) {
