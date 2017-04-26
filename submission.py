@@ -1,1 +1,3 @@
+def predictor():
+    return 'Y'
 
