@@ -26,7 +26,7 @@ app.listen(3000, function() {
 })
 
 
-app.get('/getSubmission', function(req, res){
+app.get('/', function(req, res){
 
     var cmd = 'cat submission.py';
     cp.exec(cmd, (error, stdout, stderr) => {
