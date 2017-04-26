@@ -1,3 +1,4 @@
-def predictor():
+def predictor(row):
     return 'Y'
+
 
