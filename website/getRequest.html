@@ -19,7 +19,7 @@
   <script src="CodeMirror/mode/python/python.js">
   </script>
   <style type="text/css">
-  .CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
+   .CodeMirror {border-top: 1px solid black; border-bottom: 1px solid black;}
   </style>
 </head>
 <body>
@@ -39,29 +39,30 @@
   </nav>
   <div class="container">
     <div>
-    <br><br><br>
       <h1>Submit Code</h1>
       <p class="lead">Assume <code>loan_table</code> defined correctly. Write a function <code>predictor</code> that implements the tree shown below. <b>Important:</b> use the mode for any columns that have empty values. I suggest you compute the mode(s) in a practice notebook and just use them here. Easier than computing all the modes from scratch below.</p>
       <div class="col-md-6 col-md-offset-3"><img src="challenge2.png" style="width:100%"></div>
-      <div class="col-md-12 form-group">
-        <textarea class="form-control" id="code" name="code" rows="10"></textarea><br><button class="btn btn-primary" id="submit" type="button">Submit Code</button>
+      <div class="col-md-6 form-group">
+        <textarea class="form-control" id="code" name="code" rows="10"></textarea><br>
+        <div class="col-md-6 col-md-offset-3">
+          <button class="btn btn-primary" id="submit" type="button">Submit Code</button>
+        </div>
+      </div>
+      <div class="container col-md-6">
+        <div class="starter-template">
+          <h1>Latest Build Status</h1>
+          <p class="lead" id="status"><i class="fa fa-hourglass-half fa-spin" style="font-size:24px"></i> Fetching...</p>
+          <p id="error"></p>
+        </div>
       </div>
     </div>
-  </div>
-  <div class="container">
-    <div class="starter-template">
-      <h1>Latest Build Status</h1>
-      <p class="lead" id="status"><i class="fa fa-hourglass-half fa-spin" style="font-size:24px"></i> Fetching...</p>
-      <p id="error"></p>
-    </div>
-  </div><!-- /.container -->
-  <!-- Bootstrap core JavaScript
+  </div><!-- Bootstrap core JavaScript
     ================================================== -->
   <!-- Placed at the end of the document so the pages load faster -->
   <script src="js/jquery.js">
   </script> 
   <script>
-  window.jQuery || document.write('<script src="js/jquery.js"><\/script>')
+   window.jQuery || document.write('<script src="js/jquery.js"><\/script>')
   </script> 
   <script src="js/bootstrap.min.js">
   </script> 
