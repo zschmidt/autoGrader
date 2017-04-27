@@ -4,7 +4,7 @@ cache:
   pip
 
 python:
-  - "nightly"
+  - "3.6"
 # command to install dependencies
 before_install:
   - source ~/virtualenv/python3.6/bin/activate
