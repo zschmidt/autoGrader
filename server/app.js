@@ -1,3 +1,6 @@
+var absolutePath = "/home/zach/autoGrader";
+
+
 var express = require('express');
 var bodyParser = require('body-parser');
 var cp = require('child_process');
@@ -23,7 +26,7 @@ app.use(bodyParser.json())
 
 
 app.get('/getSubmission', function(req, res){
-    var cmd = 'cat /home/zach/autoGrader/submission.py';
+    var cmd = 'cat '+absolutePath+'/submission.py';
     cp.exec(cmd, (error, stdout, stderr) => {
         res.send(stdout);
     });
@@ -43,7 +46,7 @@ app.post('/', function(req, res) {
 	var dt = dateTime.create();
 	dt = dt.format('Y-m-d H:M:S');
 
-    var testCmd = 'rm /home/zach/autoGrader/submission.py && touch /home/zach/autoGrader/submission.py && echo "'+req.body.code+'">>submission.py && git add . && git commit -m "Auto commit from thoth at '+dt+'" && git push';
+    var testCmd = 'cd '+absolutePath+' && rm submission.py && touch submission.py && echo "'+req.body.code+'">>submission.py && git add . && git commit -m "Auto commit from thoth at '+dt+'" && git push';
 
 
     console.log("Request ", req);
