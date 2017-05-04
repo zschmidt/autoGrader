@@ -1,5 +1,6 @@
 def predictor(row):
-    return predictor
+    return bad
+
 
 
 
