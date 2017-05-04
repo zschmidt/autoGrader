@@ -57,7 +57,6 @@ app.post('/', function(req, res) {
 	var dt = dateTime.create();
 	dt = dt.format('Y-m-d H:M:S');
     var pushCmd = 'cd '+absolutePath+' && rm submission.py && touch submission.py && echo "'+req.body.code+'">>submission.py && git add . && git commit -m "Auto commit from thoth at '+dt+'" && git push';
-    console.log("Request ", req);
     cp.exec(pushCmd, (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
