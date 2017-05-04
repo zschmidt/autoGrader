@@ -1,6 +1,7 @@
 def predictor(row):
-    # sorry, this still doesn't work :(
+    # it should fail this now!
     return 'Y'
+
 
 
 
