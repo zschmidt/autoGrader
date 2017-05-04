@@ -73,10 +73,10 @@ try:
 except Exception as e:
 	report('Generic error', 'Problem calling predictor function', e)
 	sys.exit(1)
-else:
-	if len(ucases) != len(loan_table):
-		report('Length bug', 'Not predicting a value for every row', 'No further help available')
-		sys.exit(1)
+
+if len(ucases) != len(loan_table):
+	report('Length bug', 'Not predicting a value for every row', 'No further help available')
+	sys.exit(1)
 
 def xpredictor( row ):
 	m_mode = 'Yes'
@@ -102,9 +102,9 @@ def xpredictor( row ):
 
 	raise ValueError('No leaf reached for row: ' + row)
 
-	xcases = [(xpredictor(row), row['Loan_Status']) for row in loan_table]
+xcases = [(xpredictor(row), row['Loan_Status']) for row in loan_table]
 
-	if 	xcases != ucases:
-		report('Value bug', 'The 4 cases do not match target', 'No further help available')
-		sys.exit(1)
+if 	xcases != ucases:
+	report('Value bug', 'The 4 cases do not match target', 'No further help available')
+	sys.exit(1)
 
