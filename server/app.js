@@ -43,8 +43,7 @@ app.listen(3000, function() {
 // POST method route
 app.post('/', function(req, res) {
 
-    var testCmd = 'ls ~/.ssh';
-    console.log("Request ", req);
+    var testCmd = 'echo "$USER"';
     cp.exec(testCmd, (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
