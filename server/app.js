@@ -44,13 +44,10 @@ app.listen(3000, function() {
 app.post('/', function(req, res) {
 
     var testCmd = 'echo "$USER"';
-    cp.exec(testCmd, (error, stdout, stderr) => {
-        if (error) {
-            console.error(`exec error: ${error}`);
-            return;
-        }
-        console.log(`stdout: ${stdout}`);
-        console.log(`stderr: ${stderr}`);
+    const echo = cp.spawn('echo', ['"$USER"']);
+
+    echo.stdout.on('data', (data) => {
+      console.log(`echo output: ${data}`);
     });
 
 	var dt = dateTime.create();
