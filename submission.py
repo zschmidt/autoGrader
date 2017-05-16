@@ -1,20 +1,4 @@
 def predictor(row):
-    # sorry, this still doesn't work :(
+    # making sure this still works
     return 'Y'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
