@@ -1,11 +1,14 @@
 var absolutePath = "/home/zach/autoGrader";
 
-
+var path = require('path');
 var express = require('express');
 var bodyParser = require('body-parser');
 var cp = require('child_process');
 var app = express();
 var dateTime = require('node-datetime');
+
+
+console.log("This is __dirname ", __dirname);
 
 
 
