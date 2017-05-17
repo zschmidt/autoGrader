@@ -8,8 +8,11 @@ var app = express();
 var dateTime = require('node-datetime');
 
 
-console.log("This is __dirname ", __dirname);
 
+// __dirname is /home/zach/autoGrader/server
+
+
+app.use(express.static(path.join(__dirname, 'public')));
 
 
 // parse application/x-www-form-urlencoded
@@ -39,8 +42,6 @@ app.get('/getSubmission', function(req, res){
 app.listen(3000, function() {
     console.log('Server listening on port 3000!')
 })
-
-
 
 
 // POST method route

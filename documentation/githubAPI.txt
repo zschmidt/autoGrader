@@ -1,0 +1,36 @@
+Must authenticate with API to go above 60 requests per hour
+
+
+curl -i -u [your_username] https://api.github.com
+
+
+
+Owner of the app must register the application:
+https://github.com/settings/developers
+
+
+
+
+Copy the good stuff to ix:
+scp -r autograder.html challenge2.png getRequest.html script.js zschmidt@ix.cs.uoregon.edu:~/public_html/
+
+
+
+Adding Scopes:
+Simply add them to the validation page -- see here:
+https://developer.github.com/v3/oauth/#scopes
+
+
+
+
+After validating the app, need to post back to github:
+https://developer.github.com/guides/basics-of-authentication/#providing-a-callback
+
+
+
+
+List of things that have to happen:
+-User signs on 
+-Select a question
+-*****At this point we can create a repo with the problem validation script
+-They submit the question and it commits

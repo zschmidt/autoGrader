@@ -1,0 +1,10 @@
+I followed this website:
+
+
+https://www.axllent.org/docs/view/nodejs-service-with-systemd/
+
+
+
+systemctl start nodeserver.service
+systemctl status nodeserver.service
+systemctl stop nodeserver.service
