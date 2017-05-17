@@ -15,11 +15,6 @@ var dateTime = require('node-datetime');
 app.use(express.static(path.join(__dirname, '/public')));
 
 
-app.use("/CodeMirror", express.static(path.join(__dirname, '/public/CodeMirror')));
-
-
-
-
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({
