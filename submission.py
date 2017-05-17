@@ -1,4 +1,5 @@
 def predictor(row):
-    # making sure this still works
+    # after adding to thoth
     return 'Y'
+
 
