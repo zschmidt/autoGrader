@@ -15,7 +15,7 @@ var dateTime = require('node-datetime');
 app.use(express.static(path.join(__dirname, '/public')));
 
 
-app.use(express.static(path.join(__dirname, '/public/CodeMirror')));
+app.use("/CodeMirror", express.static(path.join(__dirname, '/public/CodeMirror')));
 
 
 
