@@ -14,7 +14,7 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
 app.get('/auth/:code', function(req, res){
-    res.send('code '+req.params.code.split("=")[1]);
+    res.send('code '+req.query.code);
 
     console.log("client secret "+process.env.client_secret);
 
