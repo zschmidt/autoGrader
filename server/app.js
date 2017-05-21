@@ -27,7 +27,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/:code', function(req, res){
+app.get('/auth/:code', function(req, res){
     req.send("ZACH! Code is ", req.params);
 });
 
