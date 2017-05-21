@@ -19,19 +19,20 @@ app.get('/auth', function(req, res){
     var code = req.query.code;
 
 
-    console.log("curl -X POST https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+secret+"&code="+code)
+    //console.log("curl -X POST https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+secret+"&code="+code)
 
-    // var xhr = new XMLHttpRequest();
-    // xhr.open('POST', "https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+secret+"&code="+code);
-    // xhr.addEventListener("readystatechange", getAccessCode, false);
-    // xhr.send();
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+secret+"&code="+code);
+    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xhr.addEventListener("readystatechange", getAccessCode, false);
+    xhr.send();
 
-    // function getAccessCode(e) {
-    //     if (xhr.readyState === 4 && xhr.status == 200) {
-    //         console.log("ERROR: ", e);
-    //         console.log("Here's your response: ", xhr.response);
-    //     }
-    // }
+    function getAccessCode(e) {
+        if (xhr.readyState === 4 && xhr.status == 200) {
+            console.log("ERROR: ", e);
+            console.log("Here's your response: ", xhr.response);
+        }
+    }
 
 });
 
