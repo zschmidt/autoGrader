@@ -19,7 +19,7 @@ app.get('/auth', function(req, res){
     var code = req.query.code;
 
 
-    //console.log("curl -X POST https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+secret+"&code="+code)
+    console.log("curl -X POST https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&client_secret="+secret+"&code="+code);
 
     var obj = {
         client_id: "02d1c7baba80ece0140f",
