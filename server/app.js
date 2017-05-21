@@ -28,7 +28,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('/:code', function(req, res){
-    console.log("ZACH! Code is ", req.params.code);
+    console.log("ZACH! Code is ", req.params);
 });
 
 
