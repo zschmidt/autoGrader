@@ -34,3 +34,8 @@ List of things that have to happen:
 -Select a question
 -*****At this point we can create a repo with the problem validation script
 -They submit the question and it commits
+
+
+
+Client Secret:
+-This is an environment variable on the server (client_secret)

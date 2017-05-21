@@ -6,6 +6,7 @@ var bodyParser = require('body-parser');
 var cp = require('child_process');
 var app = express();
 var dateTime = require('node-datetime');
+var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
 
@@ -13,16 +14,24 @@ var dateTime = require('node-datetime');
 
 
 app.get('/auth/?code=:code', function(req, res){
-    //console.log("Zach -- code is ", req.params)
     res.send('code '+req.params.code);
-    // res.send("ZACH! Code is ", req.params);
+
+    console.log("client secret "+process.env.client_secret);
+
+    // var xhr = new XMLHttpRequest();
+    // post.open('POST', "https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+process.env.client_secret+"&code="+code);
+    // post.addEventListener("readystatechange", getAccessCode, false);
+
+    // function getAccessCode(e) {
+    //     if (post.readyState === 4 && post.status == 200) {
+    //         console.log("Here's your response: ", post.response);
+    //     }
+    // }
+
 });
 
-//app.use(express.static(path.join(__dirname, '/public')));
+app.use(express.static(path.join(__dirname, '/public')));
 
-app.get('/', function(req, res){
-    res.sendFile(path.join(__dirname, '/public/index.html'));
-});
 
 
 
