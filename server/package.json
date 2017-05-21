@@ -12,6 +12,7 @@
     "body-parser": "^1.17.1",
     "child_process": "^1.0.2",
     "express": "^4.15.2",
-    "node-datetime": "^1.0.0"
+    "node-datetime": "^1.0.0",
+    "xmlhttprequest": "^1.8.0"
   }
 }
