@@ -23,7 +23,7 @@ app.get('/auth', function(req, res){
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', "https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+secret+"&code="+code);
-    xmlhttp.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Content-Type", "application/json");
     xhr.addEventListener("readystatechange", getAccessCode, false);
     xhr.send();
 
