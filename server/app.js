@@ -12,16 +12,16 @@ var dateTime = require('node-datetime');
 // __dirname is /home/zach/autoGrader/server
 
 
-app.get('/auth/:code', function(req, res){
+app.get('/auth/', function(req, res){
     console.log("Zach -- code is ", req.params)
     // res.send("ZACH! Code is ", req.params);
 });
 
-app.use(express.static(path.join(__dirname, '/public')));
+//app.use(express.static(path.join(__dirname, '/public')));
 
-// app.get('/', function(req, res){
-//     res.sendFile(path.join(__dirname, '/public/index.html'));
-// });
+app.get('/', function(req, res){
+    res.sendFile(path.join(__dirname, '/public/index.html'));
+});
 
 
 
