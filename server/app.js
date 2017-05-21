@@ -13,7 +13,8 @@ var dateTime = require('node-datetime');
 
 
 app.get('/auth/:code', function(req, res){
-    console.log("Zach -- code is ", req.params)
+    //console.log("Zach -- code is ", req.params)
+    res.send('code '+req.params.code);
     // res.send("ZACH! Code is ", req.params);
 });
 
