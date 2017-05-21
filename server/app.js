@@ -28,6 +28,7 @@ app.get('/auth', function(req, res){
 
     function getAccessCode(e) {
         if (xhr.readyState === 4 && xhr.status == 200) {
+            console.log("ERROR: ", e);
             console.log("Here's your response: ", xhr.response);
         }
     }
