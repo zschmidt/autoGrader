@@ -13,8 +13,8 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 // __dirname is /home/zach/autoGrader/server
 
 
-app.get('/auth/?code=:code', function(req, res){
-    res.send('code '+req.query.code);
+app.get('/auth/:code', function(req, res){
+    res.send('code '+req.query.code.split("=")[1]);
 
     console.log("client secret "+process.env.client_secret);
 
