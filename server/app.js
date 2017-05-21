@@ -12,6 +12,10 @@ var dateTime = require('node-datetime');
 // __dirname is /home/zach/autoGrader/server
 
 
+app.get('/auth/:code', function(req, res){
+    req.send("ZACH! Code is ", req.params);
+});
+
 app.use(express.static(path.join(__dirname, '/public')));
 
 
@@ -27,9 +31,7 @@ app.use(function(req, res, next) {
     next();
 });
 
-app.get('/auth/:code', function(req, res){
-    req.send("ZACH! Code is ", req.params);
-});
+
 
 
 // parse application/json
