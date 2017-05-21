@@ -27,6 +27,10 @@ app.use(function(req, res, next) {
     next();
 });
 
+app.get('/:code', function(req, res){
+    console.log("ZACH! Code is ", req.params.code);
+});
+
 
 // parse application/json
 app.use(bodyParser.json())
@@ -47,13 +51,6 @@ app.listen(3000, function() {
 
 // POST method route
 app.post('/', function(req, res) {
-
-    var testCmd = 'echo "$USER"';
-    const echo = cp.spawn('echo', ['"$USER"']);
-
-    echo.stdout.on('data', (data) => {
-      console.log(`echo output: ${data}`);
-    });
 
 	var dt = dateTime.create();
 	dt = dt.format('Y-m-d H:M:S');
