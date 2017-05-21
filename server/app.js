@@ -14,19 +14,18 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 
 
 app.get('/auth', function(req, res){
-    res.send('code '+req.query.code);
+    var secret = process.env.client_secret;
+    var code = req.query.code;
 
-    console.log("client secret "+process.env.client_secret);
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', "https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+secret+"&code="+code);
+    xhr.addEventListener("readystatechange", getAccessCode, false);
 
-    // var xhr = new XMLHttpRequest();
-    // post.open('POST', "https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&redirect_uri=http://thoth.cs.uoregon.edu:3000/&client_secret="+process.env.client_secret+"&code="+code);
-    // post.addEventListener("readystatechange", getAccessCode, false);
-
-    // function getAccessCode(e) {
-    //     if (post.readyState === 4 && post.status == 200) {
-    //         console.log("Here's your response: ", post.response);
-    //     }
-    // }
+    function getAccessCode(e) {
+        if (xhr.readyState === 4 && xhr.status == 200) {
+            console.log("Here's your response: ", xhr.response);
+        }
+    }
 
 });
 
