@@ -21,16 +21,11 @@ app.get('/auth', function(req, res){
 
     console.log("curl -X POST https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&client_secret="+secret+"&code="+code);
 
-    var obj = {
-        client_id: "02d1c7baba80ece0140f",
-        client_secret: secret,
-        code: code
-    };
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', "https://github.com/login/oauth/access_token");
     xhr.addEventListener("readystatechange", getAccessCode, false);
-    xhr.send(JSON.stringify(obj));
+    xhr.send('client_id=02d1c7baba80ece0140f&client_secret='+secret+'&code='+code);
 
     function getAccessCode(e) {
         if (xhr.readyState === 4 && xhr.status == 200) {
