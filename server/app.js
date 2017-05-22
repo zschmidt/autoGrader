@@ -19,22 +19,20 @@ app.get('/auth', function(req, res){
     var code = req.query.code;
 
 
-    console.log("curl -X POST https://github.com/login/oauth/access_token?client_id=02d1c7baba80ece0140f&client_secret="+secret+"&code="+code);
+    var http = new XMLHttpRequest();
+    var url = "https://github.com/login/oauth/access_token";
+    var params = "client_id=02d1c7baba80ece0140f&client_secret="+secret+"&code="+code;
+    http.open("POST", url, true);
 
+    //Send the proper header information along with the request
+    http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    var xhr = new XMLHttpRequest();
-    xhr.open('POST', "https://github.com/login/oauth/access_token");
-    xhr.addEventListener("readystatechange", getAccessCode, false);
-    xhr.send('client_id=02d1c7baba80ece0140f&client_secret='+secret+'&code='+code);
-
-    function getAccessCode(e) {
-        console.log("what's e ", e);
-        console.log("what's response ", xhr.response);
-        if (xhr.readyState === 4 && xhr.status == 200) {
-            console.log("ERROR: ", e);
-            console.log("Here's your response: ", xhr.response);
+    http.onreadystatechange = function() {//Call a function when the state changes.
+        if(http.readyState == 4 && http.status == 200) {
+            console.log(http.responseText);
         }
     }
+    http.send(params);
 
 });
 
