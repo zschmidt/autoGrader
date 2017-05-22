@@ -26,18 +26,21 @@ app.get('/auth', function(req, res){
     var url = "https://github.com/login/oauth/access_token";
     var params = "client_id=02d1c7baba80ece0140f&client_secret="+secret+"&code="+code;
     console.log('curl --data "'+params+'" '+url);
-    // http.open("POST", url, true);
+    if(url && params){ //Sometimes they're undefined.... spooky!
+        http.open("POST", url, true);
 
-    // //Send the proper header information along with the request
-    // http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        //Send the proper header information along with the request
+        http.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 
-    // http.onreadystatechange = function() {//Call a function when the state changes.
-    //     console.log("Inside -- ", http);
-    //     if(http.readyState == 4 && http.status == 200) {
-    //         console.log(http.responseText);
-    //     }
-    // }
-    // http.send(params);
+        http.onreadystatechange = function() {//Call a function when the state changes.
+            console.log("Inside -- ", http);
+            if(http.readyState == 4 && http.status == 200) {
+                console.log(http.responseText);
+            }
+        }
+        http.send(params);
+    }
+    
 
 });
 
