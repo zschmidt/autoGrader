@@ -28,6 +28,8 @@ app.get('/auth', function(req, res){
     xhr.send('client_id=02d1c7baba80ece0140f&client_secret='+secret+'&code='+code);
 
     function getAccessCode(e) {
+        console.log("what's e ", e);
+        console.log("what's response ", xhr.response);
         if (xhr.readyState === 4 && xhr.status == 200) {
             console.log("ERROR: ", e);
             console.log("Here's your response: ", xhr.response);
