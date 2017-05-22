@@ -29,7 +29,8 @@ app.get('/auth', function(req, res){
     if(url && params){ //Sometimes they're undefined.... spooky!
         var cmd = 'curl --data "'+params+'" '+url;
         cp.exec(cmd, (error, stdout, stderr) => {
-            res.send(stdout);
+            access_token = stdout.split("&")[0].split("=")[1];
+            res.redirect('/');
         });
     }
     
