@@ -30,6 +30,7 @@ app.get('/auth', function(req, res){
         var cmd = 'curl --data "'+params+'" '+url;
         cp.exec(cmd, (error, stdout, stderr) => {
             access_token = stdout.split("&")[0].split("=")[1];
+            console.log("SUCCESS! Access token: "+access_token);
             res.redirect('/');
         });
     }
