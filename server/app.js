@@ -32,7 +32,7 @@ app.get('/auth', function(req, res){
             access_token = stdout.split("&")[0].split("=")[1];
             console.log("SUCCESS! Access token: "+access_token);
             res.send(sendAccessToken(access_token));
-            //res.redirect('/');
+            res.redirect('/');
         });
     }
     
