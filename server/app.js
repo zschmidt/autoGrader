@@ -17,16 +17,11 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 app.get('/auth', function(req, res){
     var secret = process.env.client_secret;
     var code = req.query.code;
-
-
-    console.log('curl --data "'+params+'" '+url);
-
-
-    var http = new XMLHttpRequest();
     var url = "https://github.com/login/oauth/access_token";
     var params = "client_id=02d1c7baba80ece0140f&client_secret="+secret+"&code="+code;
     
     if(url && params){ //Sometimes they're undefined.... spooky!
+        console.log('curl --data "'+params+'" '+url);
         var cmd = 'curl --data "'+params+'" '+url;
         cp.exec(cmd, (error, stdout, stderr) => {
             access_token = stdout.split("&")[0].split("=")[1];
