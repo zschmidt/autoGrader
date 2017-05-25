@@ -1,4 +1,5 @@
-var absolutePath = "/home/zach/autoGrader";
+var serverName = "thoth.cs.uoregon.edu:3000"
+
 
 var path = require('path');
 var express = require('express');
@@ -13,6 +14,10 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 // __dirname is /home/zach/autoGrader/server
 
 
+function sendAccessToken(access_token){
+    return "<!doctype html><html lang='en'><head><style type='text/css'>@keyframes spinner{to{transform:rotate(360deg)}}.spinner:before{content:'';box-sizing:border-box;position:absolute;top:50%;left:50%;width:20px;height:20px;margin-top:-10px;margin-left:-10px;border-radius:50%;border-top:2px solid #07d;border-right:2px solid transparent;animation:spinner.6s linear infinite}</style><meta charset='utf-8'><title>Authenticating...</title></head><body><div class='spinner'></div><script type='text/javascript'>function store(){sessionStorage.setItem('access_token',"+access_token+")}window.onload=store;</script></body></html>";
+}
+
 //Don't forget to add the client secret to the environment variables!
 app.get('/auth', function(req, res){
     var secret = process.env.client_secret;
@@ -26,7 +31,8 @@ app.get('/auth', function(req, res){
         cp.exec(cmd, (error, stdout, stderr) => {
             access_token = stdout.split("&")[0].split("=")[1];
             console.log("SUCCESS! Access token: "+access_token);
-            res.redirect('/');
+            res.send(sendAccessToken(access_token));
+            //res.redirect('/');
         });
     }
     
@@ -57,7 +63,7 @@ app.use(bodyParser.json())
 
 
 app.get('/getSubmission', function(req, res){
-    var cmd = 'cat '+absolutePath+'/submission.py';
+    var cmd = 'cat '+__dirname+'/../submission.py';
     cp.exec(cmd, (error, stdout, stderr) => {
         res.send(stdout);
     });
@@ -74,7 +80,7 @@ app.post('/', function(req, res) {
 
 	var dt = dateTime.create();
 	dt = dt.format('Y-m-d H:M:S');
-    var pushCmd = 'cd '+absolutePath+' && rm submission.py && touch submission.py && echo "'+req.body.code+'">>submission.py && git add . && git commit -m "Auto commit from thoth at '+dt+'" && git push';
+    var pushCmd = 'cd '+__dirname+'/../'+' && rm submission.py && touch submission.py && echo "'+req.body.code+'">>submission.py && git add . && git commit -m "Auto commit from thoth at '+dt+'" && git push';
     cp.exec(pushCmd, (error, stdout, stderr) => {
         if (error) {
             console.error(`exec error: ${error}`);
