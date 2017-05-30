@@ -63,9 +63,14 @@ app.use(bodyParser.json())
 
 
 app.get('/getSubmission', function(req, res){
+
+    var test = "I see module "+req.query.module+" and access_token "+req.query.access_token
+
     var cmd = 'cat '+__dirname+'/../submission.py';
     cp.exec(cmd, (error, stdout, stderr) => {
-        res.send(stdout);
+        res.send(test)
+
+        //res.send(stdout);
     });
 });
 

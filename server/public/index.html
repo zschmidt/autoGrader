@@ -29,7 +29,7 @@
             </div>
             <div id="navbar" class="collapse navbar-collapse">
                 <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
+                    <li class="active"><a href="http://ix.cs.uoregon.edu/~zschmidt/autograder">Home</a></li>
                 </ul>
             </div>
             <!--/.nav-collapse -->
@@ -39,23 +39,21 @@
         <div class="starter-template">
             <h1>Welcome to Autograder!</h1>
             <p class="lead">Click "Module 9" below to see an example!</p>
-
-
             <div class="col-md-offset-3 col-md-6">
-            	<a href="module9/index.html" class="btn btn-primary">Module 9</a>
+                <a href="module9/index.html" class="btn btn-primary">Module 9</a>
             </div>
-
         </div>
     </div>
     <!-- /.container -->
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script>
-    window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+    <script type="text/javascript">
+    window.onload = function() {
+        if (!sessionStorage.access_token) {
+            $(".starter-template").html("<h1>Invalid credentials!<br/><br/> Please login at the AutoGrader homepage!</h1>");
+        }
+    }
     </script>
-    <script src="../../dist/js/bootstrap.min.js"></script>
-    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
-    <script src="../../assets/js/ie10-viewport-bug-workaround.js"></script>
 </body>
 
 </html>
