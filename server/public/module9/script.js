@@ -90,7 +90,6 @@ var getLastSubmission = function(editor) {
     request.send();
     request.addEventListener("readystatechange", function() {
         if (request.readyState === 4 && request.status == 200) {
-            console.log(request.response);
             var response = JSON.parse(request.response);
             sessionStorage.setItem('login', response.login);
             editor.setValue(response.submission);
