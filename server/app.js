@@ -79,7 +79,7 @@ app.get('/getSubmission', function(req, res) {
             response.submission = stdout;
             if(stdout.includes("404: Not Found"))
                 response.submission = " ";
-            res.send(stdout);
+            res.send(JSON.stringify(response));
         });
     });
 });
