@@ -87,7 +87,6 @@ var getLastSubmission = function(editor) {
     request.send();
     request.addEventListener("readystatechange", function() {
         if (request.readyState === 4 && request.status == 200) {
-            console.log("Back from THOTH ", request.response);
             var submission = request.response;
             editor.setValue(submission);
         }
