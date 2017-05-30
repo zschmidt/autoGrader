@@ -82,7 +82,7 @@ var startBuild = function() {
 
 var getLastSubmission = function(editor) {
 
-    var access_token = sessionStorage.access_token;
+    access_token = sessionStorage.access_token;
 
     var request = new XMLHttpRequest();
     request.open('GET', "http://thoth.cs.uoregon.edu:3000/getSubmission?module="+module+"&access_token="+access_token);
