@@ -70,6 +70,8 @@ app.get('/getSubmission', function(req, res) {
         var login = JSON.parse(stdout).login;
         var lastSubmission = 'curl https://raw.githubusercontent.com/' + login + '/' + module + '/master/submission.py'
         cp.exec(lastSubmission, (error, stdout, stderr) => {
+            if(stdout==="404: Not Found")
+                stdout = " ";
             res.send(stdout);
         });
     });
