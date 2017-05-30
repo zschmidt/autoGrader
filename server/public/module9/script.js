@@ -110,7 +110,8 @@ var commit = function() {
     var obj = {
         module: module,
         code: editor.getValue(),
-        access_token: access_token
+        access_token: access_token,
+        login: sessionStorage.login
     };
     var post = new XMLHttpRequest();
     post.open('POST', "http://thoth.cs.uoregon.edu:3000");
