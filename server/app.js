@@ -69,7 +69,7 @@ app.get('/getSubmission', function(req, res){
         //var result = JSON.stringify(stdout);
         console.log("Here's the output ", stdout);
         console.log("Type is ", typeof(stdout));
-        console.log("LOGIN IS ", stdout.login);
+        console.log("LOGIN IS ", JSON.parse(stdout).login);
 
         res.send(stdout.login);
     });
