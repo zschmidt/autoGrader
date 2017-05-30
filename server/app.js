@@ -69,8 +69,7 @@ app.get('/getSubmission', function(req, res){
     var userLogin = 'curl https://api.github.com/user?access_token'+req.query.access_token;
     cp.exec(userLogin, (error, stdout, stderr) => {
         var result = JSON.stringify(stdout);
-        result = JSON.parse(result);
-        res.send(result.login);
+        res.send(result);
     });
 });
 
