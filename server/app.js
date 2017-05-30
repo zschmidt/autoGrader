@@ -56,28 +56,35 @@ app.use(function(req, res, next) {
 });
 
 
-
-
 // parse application/json
 app.use(bodyParser.json())
 
 
+
+//We respond with a JSON object
+//  {
+//      "submission":   SUBMISSION_TEXT,
+//      "login":        GITHUB_LOGIN 
+//  }
 app.get('/getSubmission', function(req, res) {
+    var response = {};
     var module = req.query.module;
     var userLogin = 'curl https://api.github.com/user?access_token=' + req.query.access_token;
     console.log(userLogin);
     cp.exec(userLogin, (error, stdout, stderr) => {
         var login = JSON.parse(stdout).login;
+        response.login = login;
         var lastSubmission = 'curl https://raw.githubusercontent.com/' + login + '/' + module + '/master/submission.py'
         cp.exec(lastSubmission, (error, stdout, stderr) => {
+            response.submission = stdout;
             if(stdout.includes("404: Not Found"))
-                stdout = " ";
+                response.submission = " ";
             res.send(stdout);
         });
     });
 });
 
-
+//Starting the server... nothing really to see here...
 app.listen(3000, function() {
     console.log('Server listening on port 3000!')
 })
@@ -88,6 +95,15 @@ app.post('/', function(req, res) {
 
     var dt = dateTime.create();
     dt = dt.format('Y-m-d H:M:S');
+
+
+    //Ready? I'd suggest the documentation to follow along...
+
+
+
+
+
+
     var pushCmd = 'cd ' + __dirname + '/../' + ' && rm submission.py && touch submission.py && echo "' + req.body.code + '">>submission.py && git add . && git commit -m "Auto commit from thoth at ' + dt + '" && git push';
     cp.exec(pushCmd, (error, stdout, stderr) => {
         if (error) {

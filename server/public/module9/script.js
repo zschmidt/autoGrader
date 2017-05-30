@@ -1,3 +1,6 @@
+var module = "module9";
+
+
 function getJobID(e) {
     if (xhr.readyState === 4 && xhr.status == 200) {
         var response = JSON.parse(xhr.response);
@@ -82,13 +85,14 @@ var getLastSubmission = function(editor) {
     var access_token = sessionStorage.access_token;
 
     var request = new XMLHttpRequest();
-    request.open('GET', "http://thoth.cs.uoregon.edu:3000/getSubmission?module=module9&access_token="+access_token);
+    request.open('GET', "http://thoth.cs.uoregon.edu:3000/getSubmission?module="+module+"&access_token="+access_token);
     request.setRequestHeader("Accept", "text/plain");
     request.send();
     request.addEventListener("readystatechange", function() {
         if (request.readyState === 4 && request.status == 200) {
-            var submission = request.response;
-            editor.setValue(submission);
+            var response = JSON.parse(request.response);
+            sessionStorage.setItem('login', response.login);
+            editor.setValue(response.submission);
         }
 
     }, false);
@@ -104,7 +108,9 @@ var commit = function() {
     startBuild();
 
     var obj = {
-        code: editor.getValue()
+        module: module,
+        code: editor.getValue(),
+        access_token: access_token
     };
     var post = new XMLHttpRequest();
     post.open('POST', "http://thoth.cs.uoregon.edu:3000");
