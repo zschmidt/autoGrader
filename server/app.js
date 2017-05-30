@@ -68,6 +68,7 @@ app.get('/getSubmission', function(req, res){
     cp.exec(userLogin, (error, stdout, stderr) => {
         //var result = JSON.stringify(stdout);
         console.log("Here's the output ", stdout);
+        console.log("Type is ", typeof(stdout));
         console.log("LOGIN IS ", stdout.login);
 
         res.send(stdout.login);
