@@ -66,10 +66,11 @@ app.get('/getSubmission', function(req, res){
 
     var test = "I see module "+req.query.module+" and access_token "+req.query.access_token
 
-    var userLogin = 'curl https://api.github.com/user/access_token'+req.query.access_token;
+    var userLogin = 'curl https://api.github.com/user?access_token'+req.query.access_token;
     cp.exec(userLogin, (error, stdout, stderr) => {
         var result = JSON.stringify(stdout);
-        res.send(result);
+        result = JSON.parse(result);
+        res.send(result.login);
     });
 });
 
