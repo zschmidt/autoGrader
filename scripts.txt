@@ -1,3 +1,0 @@
-Move crap to IX
-
-scp -r website/. zschmidt@ix.cs.uoregon.edu:~/public_html

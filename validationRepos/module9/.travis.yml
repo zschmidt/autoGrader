@@ -7,10 +7,10 @@ python:
   - "3.6"
 # command to install dependencies
 install:
-  "pip install -r requirements.txt"
+  "pip install pandas"
 # # command to run tests
 script: 
-  python module9_challenge_2.py submission.py
+  python validation.py submission.py
 
 notifications:
   email:
