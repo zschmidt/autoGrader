@@ -63,14 +63,11 @@ app.use(bodyParser.json())
 
 
 app.get('/getSubmission', function(req, res){
-
-    var test = "I see module "+req.query.module+" and access_token "+req.query.access_token
-
     var userLogin = 'curl https://api.github.com/user?access_token='+req.query.access_token;
     console.log(userLogin);
     cp.exec(userLogin, (error, stdout, stderr) => {
-        var result = JSON.stringify(stdout);
-        res.send(result);
+        //var result = JSON.stringify(stdout);
+        res.send(stdout.login);
     });
 });
 
