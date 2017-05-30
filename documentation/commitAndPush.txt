@@ -1,0 +1,72 @@
+Looks like we need the login for the user (zschmidt) and the repo name that we're creating (testRepo)
+
+
+Get User Info (has name, login):
+
+curl "https://api.github.com/user?access_token=:access_token"
+
+
+Make a repo (don't forget auto_init!!):
+
+curl -H "Content-Type: application/json" -X POST -d '{"name":"testRepo","description":"This is a test of a cUrl created repo", "auto_init":true}' https://api.github.com/user/repos?access_token=:access_token
+
+
+
+Commit & Push:
+
+1.) Get SHA for latest commit (object.sha)
+
+curl "https://api.github.com/repos/zschmidt/testRepo/git/refs/heads/master"
+
+
+2.) Get SHA for base tree (tree.sha)
+
+curl "https://api.github.com/repos/zschmidt/testRepo/git/commits/2ffe91713f15758b8239f49fc05276d2c36f788d"
+
+
+3.) Post to tree to get a new SHA for the tree (sha)
+
+curl -H "Content-Type: application/json" -X POST -d '{"base_tree": "9c970b2df6d7d32002271577dc036f4513bc614c","tree": [{"path": "dummy.txt","mode": "100644","type": "blob", "content": "this is just some dummy text"}]}' https://api.github.com/repos/zschmidt/testRepo/git/trees?access_token=:access_token
+
+
+
+This is the data we're sending:
+
+{
+  "base_tree": "9c970b2df6d7d32002271577dc036f4513bc614c",
+  "tree": [
+    {
+      "path": "dummy.txt",
+      "mode": "100644",
+      "type": "blob",
+      "content": "this is just some dummy text"
+    }
+  ]
+}
+
+4.) Post to get the new commit SHA (sha)
+
+NOTE:
+Set parents to be an array containing SHA-LATEST-COMMIT
+Set tree to be SHA-NEW-TREE
+From the response, get the top-level SHA (SHA-NEW-COMMIT)
+
+
+curl -H "Content-Type: application/json" -X POST -d '{"message": "Test commit from cURL at 1:38","parents": ["2ffe91713f15758b8239f49fc05276d2c36f788d"],"tree": "37fc0667cf42b1ad28c1f436e32432f2b599a5e6"}' https://api.github.com/repos/zschmidt/testRepo/git/commits?access_token=:access_token
+
+
+This is the data we're sending:
+
+{
+  "message": "Test commit from cURL at 1:38",
+  "parents": [
+    "2ffe91713f15758b8239f49fc05276d2c36f788d"
+  ],
+  "tree": "37fc0667cf42b1ad28c1f436e32432f2b599a5e6"
+}
+
+
+5.) Post the commit to github (I think this is the actual push?)
+
+
+curl -H "Content-Type: application/json" -X POST -d '{"sha":":sha"}' https://api.github.com/repos/zschmidt/testRepo/git/refs/heads/master?access_token=:access_token
