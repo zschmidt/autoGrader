@@ -138,7 +138,7 @@ app.post('/', function(req, res) {
                         "content": code
                     }]
                 };
-                var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d " + JSON.stringify(content) + " https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
+                var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
                 console.log("SHA_NEW_TREE " + SHA_NEW_TREE);
                 cp.exec(SHA_NEW_TREE, (error, stdout, stderr) => {
                     var response = JSON.parse(stdout);
@@ -152,7 +152,7 @@ app.post('/', function(req, res) {
                         ],
                         "tree": SHA_NEW_TREE
                     }
-                    var SHA_NEW_COMMIT = "curl -H 'Content-Type: application/json' -X POST -d " + JSON.stringify(content) + " https://api.github.com/repos/" + login + "/" + repo + "/git/commits?access_token=" + access_token;
+                    var SHA_NEW_COMMIT = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/commits?access_token=" + access_token;
                     console.log("SHA_NEW_COMMIT "+SHA_NEW_COMMIT);
                     cp.exec(SHA_NEW_COMMIT, (error, stdout, stderr) => {
                         var response = JSON.parse(stdout);
