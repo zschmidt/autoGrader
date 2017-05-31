@@ -159,7 +159,7 @@ app.post('/', function(req, res) {
                         SHA_NEW_COMMIT = response.sha;
                         console.log("Responded: SHA_NEW_COMMIT="+SHA_NEW_COMMIT);
                         // 5.) We made it! Push to github!
-                        var push = "curl -H 'Content-Type: application/json' -X POST -d '{\"sha\":" + SHA_NEW_COMMIT + "}' https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master?access_token=" + access_token;
+                        var push = "curl -H 'Content-Type: application/json' -X POST -d '{\"sha\":'" + SHA_NEW_COMMIT + "'}' https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master?access_token=" + access_token;
                         console.log("Push "+push);
                         cp.exec(push, (error, stdout, stderr) => {
                             res.send("Successfully pushed to GitHub");
