@@ -47,7 +47,7 @@ function getLog(e) {
 
 var getRequest = function() {
     xhr = new XMLHttpRequest();
-    xhr.open('GET', "https://api.travis-ci.org/repos/zschmidt/autoGrader/builds");
+    xhr.open('GET', "https://api.travis-ci.org/repos/"+sessionStorage.login+"/"+module+"/builds");
     xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
     xhr.send();
     xhr.addEventListener("readystatechange", getJobID, false);
@@ -93,6 +93,7 @@ var getLastSubmission = function(editor) {
             var response = JSON.parse(request.response);
             sessionStorage.setItem('login', response.login);
             editor.setValue(response.submission);
+            getRequest();
         }
 
     }, false);
@@ -142,6 +143,4 @@ $(document).ready(function() {
         matchBrackets: true
     });
     getLastSubmission(editor);
-    getRequest();
-
 });
