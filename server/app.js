@@ -120,14 +120,20 @@ app.post('/', function(req, res) {
         cp.exec(SHA_LAST_COMMIT, (error, stdout, stderr) => {
             var response = JSON.parse(stdout);
             SHA_LAST_COMMIT = response.object.sha; //Oh JavaScript, you dog you.
-            console.log("Responded: SHA_LAST_COMMIT="+SHA_LAST_COMMIT);
+            console.log("Responded: SHA_LAST_COMMIT=" + SHA_LAST_COMMIT);
+            if (!SHA_LAST_COMMIT) {
+                res.send("Server barfed on SHA_BASE_TREE");
+            }
             // 2.) We now need the SHA of the base tree
             var SHA_BASE_TREE = "curl https://api.github.com/repos/" + login + "/" + repo + "/git/commits/" + SHA_LAST_COMMIT;
             console.log("SHA_BASE_TREE " + SHA_BASE_TREE);
             cp.exec(SHA_BASE_TREE, (error, stdout, stderr) => {
                 var response = JSON.parse(stdout);
                 SHA_BASE_TREE = response.tree.sha;
-                console.log("Responded: SHA_BASE_TREE="+SHA_BASE_TREE);
+                console.log("Responded: SHA_BASE_TREE=" + SHA_BASE_TREE);
+                if (!SHA_BASE_TREE) {
+                    res.send("Server barfed on SHA_BASE_TREE");
+                }
                 // 3.) Post out for a new tree -> save the resulting SHA
                 var content = {
                     "base_tree": SHA_BASE_TREE,
@@ -143,7 +149,10 @@ app.post('/', function(req, res) {
                 cp.exec(SHA_NEW_TREE, (error, stdout, stderr) => {
                     var response = JSON.parse(stdout);
                     SHA_NEW_TREE = response.sha;
-                    console.log("Responded: SHA_NEW_TREE="+SHA_NEW_TREE);
+                    console.log("Responded: SHA_NEW_TREE=" + SHA_NEW_TREE);
+                    if (!SHA_NEW_TREE) {
+                        res.send("Server barfed on SHA_NEW_TREE");
+                    }
                     // 4.) Post to get new commit SHA
                     var content = {
                         "message": "Auto commit from thoth at " + dt,
@@ -153,14 +162,17 @@ app.post('/', function(req, res) {
                         "tree": SHA_NEW_TREE
                     }
                     var SHA_NEW_COMMIT = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/commits?access_token=" + access_token;
-                    console.log("SHA_NEW_COMMIT "+SHA_NEW_COMMIT);
+                    console.log("SHA_NEW_COMMIT " + SHA_NEW_COMMIT);
                     cp.exec(SHA_NEW_COMMIT, (error, stdout, stderr) => {
                         var response = JSON.parse(stdout);
                         SHA_NEW_COMMIT = response.sha;
-                        console.log("Responded: SHA_NEW_COMMIT="+SHA_NEW_COMMIT);
+                        console.log("Responded: SHA_NEW_COMMIT=" + SHA_NEW_COMMIT);
+                        if (!SHA_NEW_COMMIT) {
+                            res.send("Server barfed on SHA_NEW_COMMIT");
+                        }
                         // 5.) We made it! Push to github!
                         var push = "curl -H 'Content-Type: application/json' -X POST -d '{\"sha\":\"" + SHA_NEW_COMMIT + "\"}' https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master?access_token=" + access_token;
-                        console.log("Push "+push);
+                        console.log("Push " + push);
                         cp.exec(push, (error, stdout, stderr) => {
                             res.send("Successfully pushed to GitHub");
                         });
