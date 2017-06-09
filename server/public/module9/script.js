@@ -108,7 +108,10 @@ var getLastSubmission = function(editor) {
 //This code fires off the contents of the input box to thoth, who then commits it to GitHub
 
 var commit = function() {
-    startBuild();
+    if(mostRecentBuild){
+        startBuild();
+    }
+    
 
     var obj = {
         module: module,
