@@ -122,7 +122,7 @@ app.post('/', function(req, res) {
             SHA_LAST_COMMIT = response.object.sha; //Oh JavaScript, you dog you.
             console.log("Responded: SHA_LAST_COMMIT=" + SHA_LAST_COMMIT);
             if (!SHA_LAST_COMMIT) {
-                res.send("Server barfed on SHA_BASE_TREE");
+                res.send("Server barfed on SHA_LAST_COMMIT");
             }
             // 2.) We now need the SHA of the base tree
             var SHA_BASE_TREE = "curl https://api.github.com/repos/" + login + "/" + repo + "/git/commits/" + SHA_LAST_COMMIT;
@@ -135,6 +135,14 @@ app.post('/', function(req, res) {
                     res.send("Server barfed on SHA_BASE_TREE");
                 }
                 // 3.) Post out for a new tree -> save the resulting SHA
+
+                var getVaildationContents = "cd "+__dirname+"/../validationRepos/"+module+" && cat validation.py";
+                var validationContents;
+                cp.exec(getVaildationContents, (error, stdout, stderr) => {
+                    validationContents = stdout;
+                });
+
+
                 var content = {
                     "base_tree": SHA_BASE_TREE,
                     "tree": [{
@@ -142,6 +150,18 @@ app.post('/', function(req, res) {
                         "mode": "100644",
                         "type": "blob",
                         "content": code
+                    },
+                    {
+                        "path": ".travis.yml",
+                        "mode": "100644",
+                        "type": "blob",
+                        "content": 'language: python\n\ncache:\n\tpip\n\npython:\n\t- "3.6"\n# command to install dependencies\ninstall:\n\t"pip install pandas"\n# # command to run tests\nscript: \n\tpython validation.py submission.py\n\nnotifications:\n\temail:\n\t\ton_success: never\n\t\ton_failure: never'
+                    },
+                    {
+                        "path": "validation.py",
+                        "mode": "100644",
+                        "type": "blob",
+                        "content": validationContents
                     }]
                 };
                 var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
