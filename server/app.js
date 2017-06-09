@@ -210,6 +210,7 @@ app.post('/', function(req, res) {
 
     cp.exec(lookForRepo, (error, stdout, stderr) => {
         var response = JSON.parse(stdout);
+        console.log("Inside lookForRepo... what happened? ", response);
         if (response.message && response.message === "Not Found") {
             //We haven't created this repo yet
             console.log("Could not find repo.... creating!");
