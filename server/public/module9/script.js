@@ -9,25 +9,27 @@ function getJobID(e) {
 
         console.log("Got this back from travis ", mostRecentBuild);
 
-        if (mostRecentBuild.state === "passed") {
-            $("#status").html("<span class='label label-success'>Passed</span>");
-            $("#error").html("");
-        } else if (mostRecentBuild.state === "started") {
-            $("#status").html("<span class='label label-primary'>Started</span>");
-            $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Building...");
-
-        } else if (mostRecentBuild.state === "created") {
-            $("#status").html("<span class='label label-primary'>Created</span>");
-            $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Starting up...");
-        } else {
-            $("#status").html("<span class='label label-danger'>" + mostRecentBuild.state.toUpperCase() + "</span>");
-            $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Fetching error...");
-            var mostRecentBuildJobID = mostRecentBuild.job_ids[0];
-            xhr = new XMLHttpRequest();
-            xhr.open('GET', "https://api.travis-ci.org/jobs/" + mostRecentBuildJobID + "/log");
-            xhr.setRequestHeader("Accept", "text/plain");
-            xhr.send();
-            xhr.addEventListener("readystatechange", getLog, false);
+        if(mostRecentBuild){
+            if (mostRecentBuild.state === "passed") {
+                $("#status").html("<span class='label label-success'>Passed</span>");
+                $("#error").html("");
+            } else if (mostRecentBuild.state === "started") {
+                $("#status").html("<span class='label label-primary'>Started</span>");
+                $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Building...");
+    
+            } else if (mostRecentBuild.state === "created") {
+                $("#status").html("<span class='label label-primary'>Created</span>");
+                $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Starting up...");
+            } else {
+                $("#status").html("<span class='label label-danger'>" + mostRecentBuild.state.toUpperCase() + "</span>");
+                $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Fetching error...");
+                var mostRecentBuildJobID = mostRecentBuild.job_ids[0];
+                xhr = new XMLHttpRequest();
+                xhr.open('GET', "https://api.travis-ci.org/jobs/" + mostRecentBuildJobID + "/log");
+                xhr.setRequestHeader("Accept", "text/plain");
+                xhr.send();
+                xhr.addEventListener("readystatechange", getLog, false);
+            }
         }
     }
 }
