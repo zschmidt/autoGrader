@@ -139,6 +139,7 @@ app.post('/', function(req, res) {
                 var getVaildationContents = "cd "+__dirname+"/../validationRepos/"+module+" && cat validation.py";
                 cp.exec(getVaildationContents, (error, stdout, stderr) => {
                     var validationContents = stdout;
+                    console.log("I see validationContents ", validationContents);
                     var content = {
                         "base_tree": SHA_BASE_TREE,
                         "tree": [{
