@@ -1,6 +1,9 @@
 var module = "module9";
 
 
+var travisWorks = false;
+
+
 function getJobID(e) {
     if (xhr.readyState === 4 && xhr.status == 200) {
         var response = JSON.parse(xhr.response);
@@ -95,7 +98,9 @@ var getLastSubmission = function(editor) {
             var response = JSON.parse(request.response);
             sessionStorage.setItem('login', response.login);
             editor.setValue(response.submission);
-            //getLatestBuildStatus();
+            if(travisWorks){
+                getLatestBuildStatus();
+            }
         }
 
     }, false);
@@ -108,7 +113,7 @@ var getLastSubmission = function(editor) {
 //This code fires off the contents of the input box to thoth, who then commits it to GitHub
 
 var commit = function() {
-    if(mostRecentBuild){
+    if(travisWorks){
         startBuild();
     }
     
