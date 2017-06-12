@@ -140,6 +140,7 @@ app.post('/', function(req, res) {
                 cp.exec(getVaildationContents, (error, stdout, stderr) => {
                     var validationContents = JSON.stringify(stdout);
                     console.log("I see validationContents ", validationContents);
+                    res.send("Here's some stuff ", validationContents);
                     var content = {
                         "base_tree": SHA_BASE_TREE,
                         "tree": [{
