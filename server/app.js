@@ -70,7 +70,7 @@ app.get('/getSubmission', function(req, res) {
     var response = {};
     var module = req.query.module;
     var userLogin = 'curl https://api.github.com/user?access_token=' + req.query.access_token;
-    console.log(userLogin);
+    console.log('getSubmission ' + userLogin);
     cp.exec(userLogin, (error, stdout, stderr) => {
         var login = JSON.parse(stdout).login;
         response.login = login;
