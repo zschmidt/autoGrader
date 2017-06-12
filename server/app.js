@@ -137,64 +137,61 @@ app.post('/', function(req, res) {
                 // 3.) Post out for a new tree -> save the resulting SHA
 
                 var getVaildationContents = "cd "+__dirname+"/../validationRepos/"+module+" && cat validation.py";
-                var validationContents;
                 cp.exec(getVaildationContents, (error, stdout, stderr) => {
-                    validationContents = stdout;
-                });
-
-
-                var content = {
-                    "base_tree": SHA_BASE_TREE,
-                    "tree": [{
-                        "path": "submission.py",
-                        "mode": "100644",
-                        "type": "blob",
-                        "content": code
-                    },
-                    {
-                        "path": ".travis.yml",
-                        "mode": "100644",
-                        "type": "blob",
-                        "content": 'language: python\n\ncache:\n\tpip\n\npython:\n\t- "3.6"\n# command to install dependencies\ninstall:\n\t"pip install pandas"\n# # command to run tests\nscript: \n\tpython validation.py submission.py\n\nnotifications:\n\temail:\n\t\ton_success: never\n\t\ton_failure: never'
-                    },
-                    {
-                        "path": "validation.py",
-                        "mode": "100644",
-                        "type": "blob",
-                        "content": 'this is content'
-                    }]
-                };
-                var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
-                console.log("SHA_NEW_TREE " + SHA_NEW_TREE);
-                cp.exec(SHA_NEW_TREE, (error, stdout, stderr) => {
-                    var response = JSON.parse(stdout);
-                    SHA_NEW_TREE = response.sha;
-                    console.log("Responded: SHA_NEW_TREE=" + SHA_NEW_TREE);
-                    if (!SHA_NEW_TREE) {
-                        res.send("Server barfed on SHA_NEW_TREE");
-                    }
-                    // 4.) Post to get new commit SHA
+                    var validationContents = stdout;
                     var content = {
-                        "message": "Auto commit from thoth at " + dt,
-                        "parents": [
-                            SHA_LAST_COMMIT
-                        ],
-                        "tree": SHA_NEW_TREE
-                    }
-                    var SHA_NEW_COMMIT = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/commits?access_token=" + access_token;
-                    console.log("SHA_NEW_COMMIT " + SHA_NEW_COMMIT);
-                    cp.exec(SHA_NEW_COMMIT, (error, stdout, stderr) => {
+                        "base_tree": SHA_BASE_TREE,
+                        "tree": [{
+                            "path": "submission.py",
+                            "mode": "100644",
+                            "type": "blob",
+                            "content": code
+                        },
+                        {
+                            "path": ".travis.yml",
+                            "mode": "100644",
+                            "type": "blob",
+                            "content": 'language: python\n\ncache:\n\tpip\n\npython:\n\t- "3.6"\n# command to install dependencies\ninstall:\n\t"pip install pandas"\n# # command to run tests\nscript: \n\tpython validation.py submission.py\n\nnotifications:\n\temail:\n\t\ton_success: never\n\t\ton_failure: never'
+                        },
+                        {
+                            "path": "validation.py",
+                            "mode": "100644",
+                            "type": "blob",
+                            "content": validationContents
+                        }]
+                    };
+                    var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
+                    console.log("SHA_NEW_TREE " + SHA_NEW_TREE);
+                    cp.exec(SHA_NEW_TREE, (error, stdout, stderr) => {
                         var response = JSON.parse(stdout);
-                        SHA_NEW_COMMIT = response.sha;
-                        console.log("Responded: SHA_NEW_COMMIT=" + SHA_NEW_COMMIT);
-                        if (!SHA_NEW_COMMIT) {
-                            res.send("Server barfed on SHA_NEW_COMMIT");
+                        SHA_NEW_TREE = response.sha;
+                        console.log("Responded: SHA_NEW_TREE=" + SHA_NEW_TREE);
+                        if (!SHA_NEW_TREE) {
+                            res.send("Server barfed on SHA_NEW_TREE");
                         }
-                        // 5.) We made it! Push to github!
-                        var push = "curl -H 'Content-Type: application/json' -X POST -d '{\"sha\":\"" + SHA_NEW_COMMIT + "\"}' https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master?access_token=" + access_token;
-                        console.log("Push " + push);
-                        cp.exec(push, (error, stdout, stderr) => {
-                            res.send("Successfully pushed to GitHub");
+                        // 4.) Post to get new commit SHA
+                        var content = {
+                            "message": "Auto commit from thoth at " + dt,
+                            "parents": [
+                                SHA_LAST_COMMIT
+                            ],
+                            "tree": SHA_NEW_TREE
+                        }
+                        var SHA_NEW_COMMIT = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/commits?access_token=" + access_token;
+                        console.log("SHA_NEW_COMMIT " + SHA_NEW_COMMIT);
+                        cp.exec(SHA_NEW_COMMIT, (error, stdout, stderr) => {
+                            var response = JSON.parse(stdout);
+                            SHA_NEW_COMMIT = response.sha;
+                            console.log("Responded: SHA_NEW_COMMIT=" + SHA_NEW_COMMIT);
+                            if (!SHA_NEW_COMMIT) {
+                                res.send("Server barfed on SHA_NEW_COMMIT");
+                            }
+                            // 5.) We made it! Push to github!
+                            var push = "curl -H 'Content-Type: application/json' -X POST -d '{\"sha\":\"" + SHA_NEW_COMMIT + "\"}' https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master?access_token=" + access_token;
+                            console.log("Push " + push);
+                            cp.exec(push, (error, stdout, stderr) => {
+                                res.send("Successfully pushed to GitHub");
+                            });
                         });
                     });
                 });
