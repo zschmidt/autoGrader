@@ -161,7 +161,7 @@ app.post('/', function(req, res) {
                         "path": "validation.py",
                         "mode": "100644",
                         "type": "blob",
-                        "content": validationContents
+                        "content": 'this is content'
                     }]
                 };
                 var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
