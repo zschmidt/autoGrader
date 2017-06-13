@@ -138,7 +138,7 @@ app.post('/', function(req, res) {
 
                 var getVaildationContents = "cd "+__dirname+"/../validationRepos/"+module+" && cat validation.py";
                 cp.exec(getVaildationContents, (error, stdout, stderr) => {
-                    var validationContents = stdout;
+                    var validationContents = String(stdout);
                     console.log("I see validationContents ", validationContents);
                     res.send("Here's some stuff ", validationContents);
                     var content = {
