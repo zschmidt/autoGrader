@@ -64,6 +64,17 @@ app.use(function(req, res, next) {
 app.use(bodyParser.json())
 
 
+
+//Helper function -- takes a gitHub access_token, returns a gitHub login
+function getLogin(access_token){
+    var userLogin = 'curl https://api.github.com/user?access_token=' + req.query.access_token;
+    console.log('getSubmission ' + userLogin);
+    cp.exec(userLogin, (error, stdout, stderr) => {
+        var login = JSON.parse(stdout).login;
+        return login;
+    });
+}
+
 //This is how we get the last thing that the student sumitted for this module
 
 //We respond with a JSON object
@@ -74,18 +85,13 @@ app.use(bodyParser.json())
 app.get('/getSubmission', function(req, res) {
     var response = {};
     var module = req.query.module;
-    var userLogin = 'curl https://api.github.com/user?access_token=' + req.query.access_token;
-    console.log('getSubmission ' + userLogin);
-    cp.exec(userLogin, (error, stdout, stderr) => {
-        var login = JSON.parse(stdout).login;
-        response.login = login;
-        var lastSubmission = 'curl https://raw.githubusercontent.com/' + login + '/' + module + '/master/submission.py'
-        cp.exec(lastSubmission, (error, stdout, stderr) => {
-            response.submission = stdout;
-            if (stdout.includes("404: Not Found"))
-                response.submission = " ";
-            res.send(JSON.stringify(response));
-        });
+    response.login = getLogin(req.query.access_token);
+    var lastSubmission = 'curl https://raw.githubusercontent.com/' + login + '/' + module + '/master/submission.py'
+    cp.exec(lastSubmission, (error, stdout, stderr) => {
+        response.submission = stdout;
+        if (stdout.includes("404: Not Found"))
+            response.submission = " ";
+        res.send(JSON.stringify(response));
     });
 });
 
@@ -93,11 +99,6 @@ app.get('/getSubmission', function(req, res) {
 app.listen(3000, function() {
     console.log('Server listening on port 3000!')
 })
-
-
-
-
-
 
 
 function makeRepo(login, module, access_token){
@@ -124,20 +125,21 @@ function makeRepo(login, module, access_token){
 // This function gets called the first time the user hits the module page
 // The object that this takes looks like this:
 // {
-//     login:          GITHUB_LOGIN,
 //     access_token:   ACCESS_TOKEN,
 //     modules:        LIST_OF_MODULES
 // }
 
 app.post('/makeRepos', function(req, res) {
 
+    console.log("Inside makeRepos...");
+
     var dt = dateTime.create();
     dt = dt.format('Y-m-d H:M:S');
 
 
-    var modules = req.body.modules;
+    var modules = JSON.parse(req.body.modules);
     var access_token = req.body.access_token;
-    var login = req.body.login;
+    var login = getLogin(access_token);
 
     for(var i=0; i<modules.length; i++){
         var repo = modules[i];

@@ -57,10 +57,17 @@
             $(".starter-template").html("<h1>Invalid credentials!<br/><br/> Please login at the AutoGrader homepage!</h1>");
         }else{
             var modules = document.getElementsByClassName("modules");
-            console.log(modules);
-            // var xhr = new XMLHttpRequest();
-            // xhr.open('POST', server+"/makeRepos");
-            // xhr.send();
+            var modulesList = [];
+            for(var i=0; i<modules.length; i++){
+                modulesList.push(modules[i].id);
+            }
+            var obj = {
+                access_token: sessionStorage.getItem("access_token"),
+                modules: JSON.stringify(modulesList);
+            }
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', server+"/makeRepos");
+            xhr.send(obj);
         }
     }
     </script>
