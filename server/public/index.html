@@ -40,7 +40,7 @@
             <h1>Welcome to Autograder!</h1>
             <p class="lead">Click "Module 9" below to see an example!</p>
             <div class="col-md-offset-3 col-md-6">
-                <a href="module9/index.html" class="btn btn-primary">Module 9</a>
+                <a href="module9/index.html" id="module9" class="modules btn btn-primary">Module 9</a>
             </div>
         </div>
     </div>
@@ -56,10 +56,11 @@
         if (!sessionStorage.access_token) {
             $(".starter-template").html("<h1>Invalid credentials!<br/><br/> Please login at the AutoGrader homepage!</h1>");
         }else{
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', server+"/makeRepos");
-            xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
-            xhr.send();
+            var modules = document.getElementsByClassName("modules");
+            console.log(modules);
+            // var xhr = new XMLHttpRequest();
+            // xhr.open('POST', server+"/makeRepos");
+            // xhr.send();
         }
     }
     </script>
