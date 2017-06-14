@@ -67,7 +67,7 @@
             }
             var xhr = new XMLHttpRequest();
             xhr.open('POST', server+"/makeRepos");
-            xhr.send(obj);
+            xhr.send(JSON.stringify(obj));
         }
     }
     </script>
