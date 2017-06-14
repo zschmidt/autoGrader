@@ -70,7 +70,6 @@ function getLogin(access_token){
     var userLogin = 'curl https://api.github.com/user?access_token=' + access_token;
     console.log('getSubmission ' + userLogin);
     var stdout = cp.execSync(userLogin).toString();
-
     return JSON.parse(stdout).login;
 }
 
@@ -102,6 +101,24 @@ app.listen(3000, function() {
 })
 
 
+
+//You can add a file to a repo like this:
+// curl -i -X PUT -H 'Authorization: token <token_string>' -d '{"path": "<filename.extension>", "message": "<Commit Message>", "committer": {"name": "<Name>", "email": "<E-Mail>"}, "content": "<Base64 Encoded>", "branch": "master"}' https://api.github.com/repos/<owner>/<repository>/contents/<filename.extension>
+// Who knew?!
+function addFile(filename, access_token, repo, login, base64){
+    var dt = dateTime.create().format('Y-m-d H:M:S');
+    var obj = {
+        path: filename,
+        message: "File added automatically at "+dt,
+        content: base64,
+        branch: "master"
+    };
+    var addFileString = 'curl -i -X PUT -H "Authorization: token '+access_token+'" -d '+JSON.stringify(obj)+' https://api.github.com/repos/'+login+'/'+repo+'/contents/'+filename;
+    console.log("AddFile ", addFileString);
+    var result = cp.execSync(addFileString).toString();
+    console.log("After adding file, result = ", result);
+}
+
 function makeRepo(login, module, access_token){
     //This function makes a repo (if one doesn't already exist) named "module" for user "login"
     var lookForRepo = 'curl https://api.github.com/repos/' + login + '/' + module;
@@ -129,7 +146,6 @@ function makeRepo(login, module, access_token){
 //     access_token:   ACCESS_TOKEN,
 //     modules:        LIST_OF_MODULES
 // }
-
 app.post('/makeRepos', function(req, res) {
 
     console.log("Inside makeRepos...");
@@ -145,6 +161,12 @@ app.post('/makeRepos', function(req, res) {
     for(var i=0; i<modules.length; i++){
         var repo = modules[i];
         makeRepo(login, repo, access_token);
+        var getBase64 = 'base64 '+__dirname+'/../validationRepos/'+repo+'/validation.py';
+        var base64 = cp.execSync(getBase64).toString();
+        addFile("validation.py", access_token, repo, login, base64);
+        getBase64 = 'base64 '+__dirname+'/../validationRepos/'+repo+'/.travis.yml';
+        base64 = cp.execSync(getBase64).toString();
+        addFile(".travis.yml", access_token, repo, login, base64);
     }
 });
 
@@ -217,7 +239,7 @@ app.post('/', function(req, res) {
                             "content": 'language: python\n\ncache:\n\tpip\n\npython:\n\t- "3.6"\n# command to install dependencies\ninstall:\n\t"pip install pandas"\n# # command to run tests\nscript: \n\tpython validation.py submission.py\n\nnotifications:\n\temail:\n\t\ton_success: never\n\t\ton_failure: never'
                         },
                         {
-                            "path": "/home/zach/autoGrader/validationRepos/module9/validation.py",
+                            "path": "validation.py",
                             "mode": "100644",
                             "type": "blob",
                             "sha": "459a21bb52079d994657a9bbc1bccf12b89f5fe0"
