@@ -67,7 +67,7 @@ app.use(bodyParser.json())
 
 //Helper function -- takes a gitHub access_token, returns a gitHub login
 function getLogin(access_token){
-    var userLogin = 'curl https://api.github.com/user?access_token=' + req.query.access_token;
+    var userLogin = 'curl https://api.github.com/user?access_token=' + access_token;
     console.log('getSubmission ' + userLogin);
     cp.exec(userLogin, (error, stdout, stderr) => {
         var login = JSON.parse(stdout).login;
