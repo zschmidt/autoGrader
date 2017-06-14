@@ -113,7 +113,7 @@ function addFile(filename, access_token, repo, login, base64){
         content: base64,
         branch: "master"
     };
-    var addFileString = 'curl -i -X PUT -H "Authorization: token '+access_token+'" -d '+JSON.stringify(obj).toString()+' https://api.github.com/repos/'+login+'/'+repo+'/contents/'+filename;
+    var addFileString = 'curl -i -X PUT -H "Authorization: token '+access_token+'" -d \''+JSON.stringify(obj)+'\' https://api.github.com/repos/'+login+'/'+repo+'/contents/'+filename;
     console.log("AddFile ", addFileString);
     var result = cp.execSync(addFileString).toString();
     console.log("After adding file, result = ", result);
