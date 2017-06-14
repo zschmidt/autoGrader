@@ -14,11 +14,6 @@ The general process is as follows:
 4. If all went well, the user now has an access token!
 
 
-## `public\`
-
-The public directory holds the code from CodeMirror (how we show the text editor on the submission page), an `index.html` which lists all the modules, and subdirectories which hold the code for the module submission pages.
-
-
 ## Node Service Setup
 
 
@@ -43,6 +38,8 @@ Don't forget to restart the server!
 
 
 ## Travis Notes
+
+After the user hits the index page, they will have a repo for every module. It is at this point that they will need to go to Travis CI and enable all repos (I cannot see a way to automate this).
 
 The Travis YML file is very important, but it's tough to make changes by committing and seeing if it works. To fix that, there's a lint'r here:
 

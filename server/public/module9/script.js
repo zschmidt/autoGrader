@@ -1,6 +1,5 @@
 var module = "module9";
-
-
+var server = "http://thoth.cs.uoregon.edu:3000";
 var travisWorks = false;
 
 
@@ -40,7 +39,7 @@ function getJobID(e) {
 function getLog(e) {
     if (xhr.readyState === 4 && xhr.status == 200) {
         var log = xhr.response;
-        var logArray = log.split("python module9_challenge_2.py submission.py");
+        var logArray = log.split("python validation.py submission.py");
         //Include a print statement in the submitted code. Do it. It'll be fun.
         var errorMessage = logArray[1].split('travis_time')[0];
         errorMessage.trim();
@@ -90,7 +89,7 @@ var getLastSubmission = function(editor) {
     access_token = sessionStorage.access_token;
 
     var request = new XMLHttpRequest();
-    request.open('GET', "http://thoth.cs.uoregon.edu:3000/getSubmission?module="+module+"&access_token="+access_token);
+    request.open('GET', server+"/getSubmission?module="+module+"&access_token="+access_token);
     request.setRequestHeader("Accept", "text/plain");
     request.send();
     request.addEventListener("readystatechange", function() {
@@ -110,7 +109,7 @@ var getLastSubmission = function(editor) {
 
 
 
-//This code fires off the contents of the input box to thoth, who then commits it to GitHub
+//This code fires off the contents of the input box to the server, who then commits it to GitHub
 
 var commit = function() {
     if(travisWorks){
@@ -125,7 +124,7 @@ var commit = function() {
         login: sessionStorage.login
     };
     var post = new XMLHttpRequest();
-    post.open('POST', "http://thoth.cs.uoregon.edu:3000");
+    post.open('POST', server);
     post.setRequestHeader("Content-type", "application/json");
     post.send(JSON.stringify(obj));
 

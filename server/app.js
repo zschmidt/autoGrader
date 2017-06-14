@@ -216,10 +216,10 @@ app.post('/', function(req, res) {
                             "content": 'language: python\n\ncache:\n\tpip\n\npython:\n\t- "3.6"\n# command to install dependencies\ninstall:\n\t"pip install pandas"\n# # command to run tests\nscript: \n\tpython validation.py submission.py\n\nnotifications:\n\temail:\n\t\ton_success: never\n\t\ton_failure: never'
                         },
                         {
-                            "path": "validation.py",
+                            "path": "/home/zach/autoGrader/validationRepos/module9/validation.py",
                             "mode": "100644",
                             "type": "blob",
-                            "content": validationContents
+                            "sha": "459a21bb52079d994657a9bbc1bccf12b89f5fe0"
                         }]
                     };
                     var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
