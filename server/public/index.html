@@ -61,12 +61,18 @@
             for(var i=0; i<modules.length; i++){
                 modulesList.push(modules[i].id);
             }
+            // var obj = {
+            //     access_token: sessionStorage.getItem("access_token"),
+            //     modules: JSON.stringify(modulesList)
+            // }
+
             var obj = {
-                access_token: sessionStorage.getItem("access_token"),
-                modules: JSON.stringify(modulesList)
+                access_token: "test",
+                modules: "test"
             }
             var xhr = new XMLHttpRequest();
             xhr.open('POST', server+"/makeRepos");
+            xhr.setRequestHeader("Content-type", "application/json");
             xhr.send(JSON.stringify(obj));
         }
     }
