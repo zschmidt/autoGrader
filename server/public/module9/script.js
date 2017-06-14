@@ -51,7 +51,9 @@ function getLog(e) {
 
 var getLatestBuildStatus = function() {
     xhr = new XMLHttpRequest();
-    xhr.open('GET', "https://api.travis-ci.org/repos/"+sessionStorage.login+"/"+module+"/builds");
+    var buildStatusString = "https://api.travis-ci.org/repos/"+sessionStorage.login+"/"+module+"/builds";
+    console.log("buildStatusString ", buildStatusString);
+    xhr.open('GET', buildStatusString);
     xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
     xhr.send();
     xhr.addEventListener("readystatechange", getJobID, false);
