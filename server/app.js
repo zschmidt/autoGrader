@@ -33,12 +33,11 @@ app.get('/auth', function(req, res) {
     if (url && params) { //Sometimes they're undefined.... spooky!
         console.log('curl --data "' + params + '" ' + url);
         var cmd = 'curl --data "' + params + '" ' + url;
-        cp.exec(cmd, (error, stdout, stderr) => {
-            access_token = stdout.split("&")[0].split("=")[1];
-            console.log("SUCCESS! Access token: " + access_token);
-            res.send(sendAccessToken(access_token));
-            res.redirect('/');
-        });
+        var stdout = cp.execSync(cmd).toString();
+        access_token = stdout.split("&")[0].split("=")[1];
+        console.log("SUCCESS! Access token: " + access_token);
+        res.send(sendAccessToken(access_token));
+        res.redirect('/');
     }
 });
 
@@ -87,12 +86,11 @@ app.get('/getSubmission', function(req, res) {
     console.log("Inside getSubmission -- access_token is "+req.query.access_token+" login is "+response.login);
     var login = response.login; 
     var lastSubmission = 'curl https://raw.githubusercontent.com/' + login + '/' + module + '/master/submission.py'
-    cp.exec(lastSubmission, (error, stdout, stderr) => {
-        response.submission = stdout;
-        if (stdout.includes("404: Not Found"))
-            response.submission = " ";
-        res.send(JSON.stringify(response));
-    });
+    var stdout = cp.execSync(lastSubmission).toString();
+    response.submission = stdout;
+    if (stdout.includes("404: Not Found"))
+        response.submission = " ";
+    res.send(JSON.stringify(response));
 });
 
 //Starting the server... nothing really to see here...
@@ -193,7 +191,7 @@ app.post('/', function(req, res) {
     // 1.) The repo exists, we need the SHA of the last commit
     var SHA_LAST_COMMIT = "curl https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master";
     console.log("SHA_LAST_COMMIT " + SHA_LAST_COMMIT);
-    var stdout = cp.exec(SHA_LAST_COMMIT).toString();
+    var stdout = cp.execSync(SHA_LAST_COMMIT).toString();
     var response = JSON.parse(stdout);
     SHA_LAST_COMMIT = response.object.sha; //Oh JavaScript, you dog you.
     console.log("Responded: SHA_LAST_COMMIT=" + SHA_LAST_COMMIT);
@@ -203,7 +201,7 @@ app.post('/', function(req, res) {
     // 2.) We now need the SHA of the base tree
     var SHA_BASE_TREE = "curl https://api.github.com/repos/" + login + "/" + repo + "/git/commits/" + SHA_LAST_COMMIT;
     console.log("SHA_BASE_TREE " + SHA_BASE_TREE);
-    stdout = cp.exec(SHA_BASE_TREE).toString();
+    stdout = cp.execSync(SHA_BASE_TREE).toString();
     var response = JSON.parse(stdout);
     SHA_BASE_TREE = response.tree.sha;
     console.log("Responded: SHA_BASE_TREE=" + SHA_BASE_TREE);
