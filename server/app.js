@@ -123,20 +123,16 @@ function makeRepo(login, module, access_token){
     //This function makes a repo (if one doesn't already exist) named "module" for user "login"
     var lookForRepo = 'curl https://api.github.com/repos/' + login + '/' + module;
     console.log("lookForRepo " + lookForRepo);
-    cp.exec(lookForRepo, (error, stdout, stderr) => {
-        var response = JSON.parse(stdout);
-        console.log("Inside lookForRepo... what happened? ", response);
-        if (response.message && response.message === "Not Found") {
-            //We haven't created this repo yet
-            console.log("Could not find repo.... creating!");
-            var makeRepo = "curl -H 'Content-Type: application/json' -X POST -d '{\"name\":\"" + module + "\",\"description\":\"This repo holds code submissions for " + module + "\", \"auto_init\":true}' https://api.github.com/user/repos?access_token=" + access_token;
-            console.log("makeRepo " + makeRepo);
-            cp.exec(makeRepo, (error, stdout, stderr) => {
-                return;
-            });
-        } 
-        return;
-    });
+    var stdout = cp.execSync(lookForRepo).toString();
+    var response = JSON.parse(stdout);
+    console.log("Inside lookForRepo... what happened? ", response);
+    if (response.message && response.message === "Not Found") {
+        //We haven't created this repo yet
+        console.log("Could not find repo.... creating!");
+        var makeRepo = "curl -H 'Content-Type: application/json' -X POST -d '{\"name\":\"" + module + "\",\"description\":\"This repo holds code submissions for " + module + "\", \"auto_init\":true}' https://api.github.com/user/repos?access_token=" + access_token;
+        console.log("makeRepo " + makeRepo);
+        cp.execSync(makeRepo);
+    }
 }
 
 
