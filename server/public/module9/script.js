@@ -8,6 +8,10 @@ function getJobID(e) {
         var response = JSON.parse(xhr.response);
         mostRecentBuild = response.builds[0];
 
+        if(!mostRecentBuild){
+            mostRecentBuild = {};
+        }
+
 
         console.log("Got this back from travis ", mostRecentBuild);
 
