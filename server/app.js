@@ -86,6 +86,7 @@ app.get('/getSubmission', function(req, res) {
     var response = {};
     var module = req.query.module;
     response.login = getLogin(req.query.access_token);
+    console.log("Inside getSubmission -- access_token is "+req.query.access_token+" login is "+response.login);
     var login = response.login; 
     var lastSubmission = 'curl https://raw.githubusercontent.com/' + login + '/' + module + '/master/submission.py'
     cp.exec(lastSubmission, (error, stdout, stderr) => {
