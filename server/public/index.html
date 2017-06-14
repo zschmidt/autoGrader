@@ -48,9 +48,18 @@
     <!-- Bootstrap core JavaScript -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript">
+
+    var server = "http://thoth.cs.uoregon.edu:3000";
+
+
     window.onload = function() {
         if (!sessionStorage.access_token) {
             $(".starter-template").html("<h1>Invalid credentials!<br/><br/> Please login at the AutoGrader homepage!</h1>");
+        }else{
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', server+"/makeRepos");
+            xhr.setRequestHeader("Accept", "application/vnd.travis-ci.2+json");
+            xhr.send();
         }
     }
     </script>

@@ -1,3 +1,4 @@
+//This is the server that hosts the website... should probably be done a different way...
 var serverName = "thoth.cs.uoregon.edu:3000"
 
 
@@ -14,11 +15,15 @@ var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 // __dirname is /home/zach/autoGrader/server
 
 
+//This is a disgusting hack to send an entire html page... I don't want to save it anywhere...
+// it's just a file that contains a spinner, and populates the session storage with the github access token
 function sendAccessToken(access_token) {
     return "<!doctype html><html lang='en'><head><style type='text/css'>@keyframes spinner{to{transform:rotate(360deg)}}.spinner:before{content:'';box-sizing:border-box;position:absolute;top:50%;left:50%;width:20px;height:20px;margin-top:-10px;margin-left:-10px;border-radius:50%;border-top:2px solid #07d;border-right:2px solid transparent;animation:spinner.6s linear infinite}</style><meta charset='utf-8'><title>Authenticating...</title></head><body><div class='spinner'></div><script type='text/javascript'>function store(){sessionStorage.removeItem('access_token');sessionStorage.setItem('access_token','" + access_token + "');setTimeout(function(){window.location.replace('http://thoth.cs.uoregon.edu:3000')},1000)}window.onload=store;</script></body></html>";
 }
 
-//Don't forget to add the client secret to the environment variables!
+//When the GitHub oauth redirect hits this, we go and get the access token, then send it back to the user
+
+//NOTE: Don't forget to add the client secret to the environment variables!
 app.get('/auth', function(req, res) {
     var secret = process.env.client_secret;
     var code = req.query.code;
@@ -35,20 +40,19 @@ app.get('/auth', function(req, res) {
             res.redirect('/');
         });
     }
-
-
 });
 
+
+//This line allows us to serve anything from the /public directory
 app.use(express.static(path.join(__dirname, '/public')));
 
 
 
 
-// parse application/x-www-form-urlencoded
+// I forget why I added these... they're probably necessary though
 app.use(bodyParser.urlencoded({
     extended: false
 }))
-
 app.use(function(req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
@@ -56,10 +60,11 @@ app.use(function(req, res, next) {
 });
 
 
-// parse application/json
+// If you want to look in request bodys
 app.use(bodyParser.json())
 
 
+//This is how we get the last thing that the student sumitted for this module
 
 //We respond with a JSON object
 //  {
@@ -90,7 +95,58 @@ app.listen(3000, function() {
 })
 
 
-// POST method route
+
+
+
+
+
+function makeRepo(login, module, access_token){
+    //This function makes a repo (if one doesn't already exist) named "module" for user "login"
+    var lookForRepo = 'curl https://api.github.com/repos/' + login + '/' + module;
+    console.log("lookForRepo " + lookForRepo);
+    cp.exec(lookForRepo, (error, stdout, stderr) => {
+        var response = JSON.parse(stdout);
+        console.log("Inside lookForRepo... what happened? ", response);
+        if (response.message && response.message === "Not Found") {
+            //We haven't created this repo yet
+            console.log("Could not find repo.... creating!");
+            var makeRepo = "curl -H 'Content-Type: application/json' -X POST -d '{\"name\":\"" + module + "\",\"description\":\"This repo holds code submissions for " + module + "\", \"auto_init\":true}' https://api.github.com/user/repos?access_token=" + access_token;
+            console.log("makeRepo " + makeRepo);
+            cp.exec(makeRepo, (error, stdout, stderr) => {
+                return;
+            });
+        } 
+        return;
+    });
+}
+
+
+// This function gets called the first time the user hits the module page
+// The object that this takes looks like this:
+// {
+//     login:          GITHUB_LOGIN,
+//     access_token:   ACCESS_TOKEN,
+//     modules:        LIST_OF_MODULES
+// }
+
+app.post('/makeRepos', function(req, res) {
+
+    var dt = dateTime.create();
+    dt = dt.format('Y-m-d H:M:S');
+
+
+    var modules = req.body.modules;
+    var access_token = req.body.access_token;
+    var login = req.body.login;
+
+    for(var i=0; i<modules.length; i++){
+        var repo = modules[i];
+        makeRepo(login, repo, access_token);
+    }
+});
+
+
+// When the user presses "Submit", this is the function that gets hit
 // This one is a bear.
 // It takes an object that looks like this:
 // {
@@ -113,6 +169,8 @@ app.post('/', function(req, res) {
 
     //Don't look here. I'm using this as a goto statement... 
     //  too tired to think of a better way...
+
+    //When this function gets called
     function repoExists() {
         // 1.) The repo exists, we need the SHA of the last commit
         var SHA_LAST_COMMIT = "curl https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master";
@@ -203,23 +261,7 @@ app.post('/', function(req, res) {
 
 
     // 0.) We've got to check to see if the repo exists
-    var lookForRepo = 'curl https://api.github.com/repos/' + login + '/' + module;
-
-    console.log("lookForRepo " + lookForRepo);
-
-    cp.exec(lookForRepo, (error, stdout, stderr) => {
-        var response = JSON.parse(stdout);
-        console.log("Inside lookForRepo... what happened? ", response);
-        if (response.message && response.message === "Not Found") {
-            //We haven't created this repo yet
-            console.log("Could not find repo.... creating!");
-            var makeRepo = "curl -H 'Content-Type: application/json' -X POST -d '{\"name\":\"" + module + "\",\"description\":\"This repo holds code submissions for " + module + "\", \"auto_init\":true}' https://api.github.com/user/repos?access_token=" + access_token;
-            console.log("makeRepo " + makeRepo);
-            cp.exec(makeRepo, (error, stdout, stderr) => {
-                repoExists();
-            });
-        } else {
-            repoExists();
-        }
-    });
+    makeRepo(login, module, access_token);
+    repoExists();
+    
 })
