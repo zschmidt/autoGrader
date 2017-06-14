@@ -9,7 +9,7 @@ function getJobID(e) {
         mostRecentBuild = response.builds[0];
 
         if(!mostRecentBuild){
-            mostRecentBuild = {};
+            mostRecentBuild = {state:""};
         }
 
 
