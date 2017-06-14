@@ -209,12 +209,6 @@ app.post('/', function(req, res) {
         res.send("Server barfed on SHA_BASE_TREE");
     }
     // 3.) Post out for a new tree -> save the resulting SHA
-
-    var getVaildationContents = "cd "+__dirname+"/../validationRepos/"+module+" && cat validation.py";
-    stdout = cp.execSync(getVaildationContents).toString();
-    var validationContents = String(stdout);
-    console.log("I see validationContents ", validationContents);
-    res.send("Here's some stuff ", validationContents);
     var content = {
         "base_tree": SHA_BASE_TREE,
         "tree": [{
