@@ -77,7 +77,7 @@ var startBuild = function() {
     async function wait() {
         await sleep(10000);
         var interval = setInterval(function() {
-            getRequest();
+            getLatestBuildStatus();
             if (mostRecentBuild.state === "passed" || mostRecentBuild.state === "failed" || mostRecentBuild.state === "errored") {
                 clearInterval(interval);
             }
