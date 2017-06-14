@@ -132,9 +132,7 @@ function makeRepo(login, module, access_token){
 app.post('/makeRepos', function(req, res) {
 
     console.log("Inside makeRepos...");
-
-    var dt = dateTime.create();
-    dt = dt.format('Y-m-d H:M:S');
+    console.log("Heres' the body ", req.body);
 
     console.log("I see modules ", req.body.modules);
 
