@@ -63,7 +63,7 @@
             }
             var obj = {
                 access_token: sessionStorage.getItem("access_token"),
-                modules: JSON.stringify(modulesList);
+                modules: JSON.stringify(modulesList)
             }
             var xhr = new XMLHttpRequest();
             xhr.open('POST', server+"/makeRepos");
