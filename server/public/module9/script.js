@@ -1,6 +1,6 @@
 var module = "module9";
 var server = "http://thoth.cs.uoregon.edu:3000";
-var travisWorks = false;
+var travisWorks = true;
 
 
 function getJobID(e) {
