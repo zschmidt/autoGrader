@@ -69,10 +69,9 @@ app.use(bodyParser.json())
 function getLogin(access_token){
     var userLogin = 'curl https://api.github.com/user?access_token=' + access_token;
     console.log('getSubmission ' + userLogin);
-    cp.exec(userLogin, (error, stdout, stderr) => {
-        var login = JSON.parse(stdout).login;
-        return login;
-    });
+    var stdout = cp.execSync(userLogin).toString();
+
+    return JSON.parse(stdout).login;
 }
 
 //This is how we get the last thing that the student sumitted for this module
