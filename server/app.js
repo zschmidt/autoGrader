@@ -136,6 +136,8 @@ app.post('/makeRepos', function(req, res) {
     var dt = dateTime.create();
     dt = dt.format('Y-m-d H:M:S');
 
+    console.log("I see modules ", req.body.modules);
+
 
     var modules = JSON.parse(req.body.modules);
     var access_token = req.body.access_token;
