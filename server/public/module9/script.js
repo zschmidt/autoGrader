@@ -9,7 +9,7 @@ function getJobID(e) {
         mostRecentBuild = response.builds[0];
 
         if(!mostRecentBuild){
-            mostRecentBuild = {state:""};
+            mostRecentBuild = {state:"", job_ids:""};
         }
 
 
@@ -30,11 +30,13 @@ function getJobID(e) {
                 $("#status").html("<span class='label label-danger'>" + mostRecentBuild.state.toUpperCase() + "</span>");
                 $("#error").html("<i class='fa fa-hourglass-half fa-spin' style='font-size:24px'></i> Fetching error...");
                 var mostRecentBuildJobID = mostRecentBuild.job_ids[0];
-                xhr = new XMLHttpRequest();
-                xhr.open('GET', "https://api.travis-ci.org/jobs/" + mostRecentBuildJobID + "/log");
-                xhr.setRequestHeader("Accept", "text/plain");
-                xhr.send();
-                xhr.addEventListener("readystatechange", getLog, false);
+                if(mostRecentBuildJobID){
+                    xhr = new XMLHttpRequest();
+                    xhr.open('GET', "https://api.travis-ci.org/jobs/" + mostRecentBuildJobID + "/log");
+                    xhr.setRequestHeader("Accept", "text/plain");
+                    xhr.send();
+                    xhr.addEventListener("readystatechange", getLog, false);
+                }
             }
         }
     }
