@@ -142,7 +142,7 @@ function getBase64(path){
 }
 
 function getBase64FromString(content){
-    var getBase64 = 'echo \''+content+'\' | base64';
+    var getBase64 = 'echo "'+content+'" | base64';
     var base64 = cp.execSync(getBase64).toString();
     return base64;
 }
