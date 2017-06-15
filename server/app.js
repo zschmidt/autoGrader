@@ -194,7 +194,7 @@ app.post('/makeRepos', function(req, res) {
 
 function fileExists(repo, login, filename){
     var lookForFile = 'curl https://api.github.com/repos/'+login+'/'+repo+'/git/trees/master';
-    var result = cp.execSync(lookForFile).toString();
+    var result = JSON.parse(cp.execSync(lookForFile).toString());
     console.log("Inside fileExists -- before -- ", result);
     result = result.tree;
     console.log("Inside fileExists -- after -- ", result);
