@@ -117,6 +117,37 @@ function addFile(filename, access_token, repo, login, base64){
     console.log("After adding file, result = ", result);
 }
 
+
+//As a spin off of above, we can update a file in a similar way
+function updateFile(filename, access_token, repo, login, base64, sha){
+    var dt = dateTime.create().format('Y-m-d H:M:S');
+    var obj = {
+        path: filename,
+        message: "File added automatically at "+dt,
+        content: base64,
+        sha: sha,
+        branch: "master"
+    };
+    var addFileString = 'curl -i -X PUT -H "Authorization: token '+access_token+'" -d \''+JSON.stringify(obj)+'\' https://api.github.com/repos/'+login+'/'+repo+'/contents/'+filename;
+    console.log("UpdateFile ", addFileString);
+    var result = cp.execSync(addFileString).toString();
+    console.log("After adding file, result = ", result);
+}
+
+
+function getBase64(path){
+    var getBase64 = 'base64 '+path;
+    var base64 = cp.execSync(getBase64).toString();
+    return base64;
+}
+
+function getBase64FromString(content){
+    var getBase64 = 'echo \''+content+'\' | base64';
+    var base64 = cp.execSync(getBase64).toString();
+    return base64;
+}
+
+
 function makeRepo(login, module, access_token){
     //This function makes a repo (if one doesn't already exist) named "module" for user "login"
     var lookForRepo = 'curl https://api.github.com/repos/' + login + '/' + module;
@@ -146,8 +177,6 @@ app.post('/makeRepos', function(req, res) {
     console.log("Heres' the body ", req.body);
 
     console.log("I see modules ", req.body.modules);
-
-
     var modules = JSON.parse(req.body.modules);
     var access_token = req.body.access_token;
     var login = getLogin(access_token);
@@ -155,14 +184,26 @@ app.post('/makeRepos', function(req, res) {
     for(var i=0; i<modules.length; i++){
         var repo = modules[i];
         makeRepo(login, repo, access_token);
-        var getBase64 = 'base64 '+__dirname+'/../validationRepos/'+repo+'/validation.py';
-        var base64 = cp.execSync(getBase64).toString();
+        var base64 = getBase64(__dirname+'/../validationRepos/'+repo+'/validation.py');
         addFile("validation.py", access_token, repo, login, base64);
-        getBase64 = 'base64 '+__dirname+'/../validationRepos/'+repo+'/.travis.yml';
-        base64 = cp.execSync(getBase64).toString();
+        base64 = getBase64(__dirname+'/../validationRepos/'+repo+'/.travis.yml');
         addFile(".travis.yml", access_token, repo, login, base64);
     }
 });
+
+
+function fileExists(repo, login, filename){
+    var lookForFile = 'curl https://api.github.com/repos/'+login+'/'+repo+'/git/trees/master';
+    var result = cp.execSync(lookForFile).toString();
+    result = result.tree;
+    for(var i=0; i<result.length; i++){
+        var file = result[i].path;
+        if(file === filename){
+            return result[i].sha;
+        }
+    }
+    return false;
+}
 
 
 // When the user presses "Submit", this is the function that gets hit
@@ -188,65 +229,14 @@ app.post('/', function(req, res) {
 
     // 0.) We've got to check to see if the repo exists
     makeRepo(login, module, access_token);
-    // 1.) The repo exists, we need the SHA of the last commit
-    var SHA_LAST_COMMIT = "curl https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master";
-    console.log("SHA_LAST_COMMIT " + SHA_LAST_COMMIT);
-    var stdout = cp.execSync(SHA_LAST_COMMIT).toString();
-    var response = JSON.parse(stdout);
-    SHA_LAST_COMMIT = response.object.sha; //Oh JavaScript, you dog you.
-    console.log("Responded: SHA_LAST_COMMIT=" + SHA_LAST_COMMIT);
-    if (!SHA_LAST_COMMIT) {
-        res.send("Server barfed on SHA_LAST_COMMIT");
+    // 1.) The repo exists, we need to see if this is a new file or an update
+    var sha = fileExists(repo, login, "submission.py");
+    var base64 = getBase64FromString(code);
+    if(sha){
+        updateFile("submission.py", access_token, repo, login, base64, sha)
+    }else{
+        addFile("submission.py", access_token, repo, login, base64)
     }
-    // 2.) We now need the SHA of the base tree
-    var SHA_BASE_TREE = "curl https://api.github.com/repos/" + login + "/" + repo + "/git/commits/" + SHA_LAST_COMMIT;
-    console.log("SHA_BASE_TREE " + SHA_BASE_TREE);
-    stdout = cp.execSync(SHA_BASE_TREE).toString();
-    var response = JSON.parse(stdout);
-    SHA_BASE_TREE = response.tree.sha;
-    console.log("Responded: SHA_BASE_TREE=" + SHA_BASE_TREE);
-    if (!SHA_BASE_TREE) {
-        res.send("Server barfed on SHA_BASE_TREE");
-    }
-    // 3.) Post out for a new tree -> save the resulting SHA
-    var content = {
-        "base_tree": SHA_BASE_TREE,
-        "tree": [{
-            "path": "submission.py",
-            "mode": "100644",
-            "type": "blob",
-            "content": code
-        }]
-    };
-    var SHA_NEW_TREE = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/trees?access_token=" + access_token;
-    console.log("SHA_NEW_TREE " + SHA_NEW_TREE);
-    stdout = cp.execSync(SHA_NEW_TREE).toString();
-    var response = JSON.parse(stdout);
-    SHA_NEW_TREE = response.sha;
-    console.log("Responded: SHA_NEW_TREE=" + SHA_NEW_TREE);
-    if (!SHA_NEW_TREE) {
-        res.send("Server barfed on SHA_NEW_TREE");
-    }
-    // 4.) Post to get new commit SHA
-    var content = {
-        "message": "Auto commit from thoth at " + dt,
-        "parents": [
-            SHA_LAST_COMMIT
-        ],
-        "tree": SHA_NEW_TREE
-    }
-    var SHA_NEW_COMMIT = "curl -H 'Content-Type: application/json' -X POST -d '" + JSON.stringify(content) + "' https://api.github.com/repos/" + login + "/" + repo + "/git/commits?access_token=" + access_token;
-    console.log("SHA_NEW_COMMIT " + SHA_NEW_COMMIT);
-    stdout = cp.execSync(SHA_NEW_COMMIT).toString();
-    var response = JSON.parse(stdout);
-    SHA_NEW_COMMIT = response.sha;
-    console.log("Responded: SHA_NEW_COMMIT=" + SHA_NEW_COMMIT);
-    if (!SHA_NEW_COMMIT) {
-        res.send("Server barfed on SHA_NEW_COMMIT");
-    }
-    // 5.) We made it! Push to github!
-    var push = "curl -H 'Content-Type: application/json' -X POST -d '{\"sha\":\"" + SHA_NEW_COMMIT + "\"}' https://api.github.com/repos/" + login + "/" + repo + "/git/refs/heads/master?access_token=" + access_token;
-    console.log("Push " + push);
-    cp.execSync(push);
+    
     res.send("Successfully pushed to GitHub");
 });
