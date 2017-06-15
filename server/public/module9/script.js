@@ -16,7 +16,11 @@ function getJobID(e) {
         console.log("Got this back from travis ", mostRecentBuild);
 
         if(mostRecentBuild){
-            if (mostRecentBuild.state === "passed") {
+            if(mostRecentBuild.state === ""){
+                $("#status").html("<span class='label label-primary'>No Builds</span>");
+                $("#error").html("");
+            }
+            else if (mostRecentBuild.state === "passed") {
                 $("#status").html("<span class='label label-success'>Passed</span>");
                 $("#error").html("");
             } else if (mostRecentBuild.state === "started") {
